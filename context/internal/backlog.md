@@ -2,7 +2,9 @@
 
 ## ☑️ Action Items
 
-- bin/codex tool new change
+- Create a new TypeScript project
+- bin/codex new change
+- build a context readme
 - Write "Studio Style", apply it to README
 - Start Draider
 

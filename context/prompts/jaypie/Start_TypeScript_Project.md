@@ -9,6 +9,7 @@ You will assist setting up a new TypeScript project for the user
 * ESLint and Prettier
 * Vite to bundle TypeScript
 * Vitest with .spec sibling files
+* Commander.js for CLI applications
 
 ## 📋 Suggested Process
 
@@ -19,7 +20,7 @@ You will assist setting up a new TypeScript project for the user
 * What is the name of the top-level package? (suggest one from the folder name)
 * What is the name of the first package's folder? (suggest cli)
 * What is the name of the first package? (suggest a logical mashup of top-level and first package; "my-project" and "cli" would be "my-project-cli", but "@orgproject/monorepo" might be "@orgproject/cli")
-* Make note of any answers in your output file is available
+* Make note of any answers in an output file if available
 
 ### Setup 🏗️
 
@@ -68,6 +69,9 @@ You will assist setting up a new TypeScript project for the user
    
    # Install additional dev dependencies from Ideal Project Structure
    npm install -D rimraf sort-package-json tsx
+   
+   # Install Commander for CLI applications
+   npm install commander
    ```
 
 ### ⚙️ Configure
@@ -152,7 +156,24 @@ export default tseslint.config(
 10. **Create Vite configuration**:
    ```bash
    # Create vite.config.ts
-   touch vite.config.ts
+   cat > vite.config.ts << EOF
+import { defineConfig } from 'vite';
+
+export default defineConfig({
+  build: {
+    lib: {
+      entry: ['./packages/cli/src/index.ts', './packages/cli/src/cli.ts'],
+      formats: ['es'],
+    },
+    rollupOptions: {
+      external: ['commander'],
+    },
+  },
+  test: {
+    globals: true,
+  },
+});
+EOF
    ```
 
 11. **Set up package scripts**:
@@ -160,7 +181,7 @@ export default tseslint.config(
    # Update root package.json scripts
    cat > package.json << EOF
 {
-  "name": "your-project-name",
+  "name": "@contextascode/monorepo",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -184,11 +205,14 @@ EOF
    # Update package-specific package.json scripts
    cat > packages/<package-folder>/package.json << EOF
 {
-  "name": "your-package-name",
+  "name": "@contextascode/cli",
   "version": "1.0.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
+  "bin": {
+    "contextascode": "dist/cli.js"
+  },
   "scripts": {
     "build": "vite build && tsc --emitDeclarationOnly",
     "clean": "rimraf dist",
@@ -210,12 +234,52 @@ EOF
     ```bash
     mkdir -p packages/<package-folder>/src
     touch packages/<package-folder>/src/index.ts
+    
+    # Create CLI entry point
+    cat > packages/<package-folder>/src/cli.ts << EOF
+#!/usr/bin/env node
+import { Command } from 'commander';
+import { version } from '../package.json';
+
+const program = new Command();
+
+program
+  .name('contextascode')
+  .description('Context as Code CLI tool')
+  .version(version);
+
+program
+  .command('hello')
+  .description('Say hello')
+  .action(() => {
+    console.log('Hello from Context as Code CLI!');
+  });
+
+program.parse();
+EOF
+
+    # Update index.ts to export main functionality
+    cat > packages/<package-folder>/src/index.ts << EOF
+// Export main functionality
+export const sayHello = (): string => {
+  return 'Hello from Context as Code!';
+};
+EOF
     ```
 
 13. **Create test files**:
     ```bash
     # Create test file as sibling to implementation file
-    touch packages/<package-folder>/src/index.spec.ts
+    cat > packages/<package-folder>/src/index.spec.ts << EOF
+import { describe, it, expect } from 'vitest';
+import { sayHello } from './index';
+
+describe('sayHello', () => {
+  it('returns the correct greeting', () => {
+    expect(sayHello()).toBe('Hello from Context as Code!');
+  });
+});
+EOF
     ```
 
 14. **Install all dependencies**:
