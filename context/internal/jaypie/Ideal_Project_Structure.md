@@ -35,8 +35,9 @@ Anything particular to that package outside aforementioned.
 | ------ | --------- | ------------ | ---------- |
 | `build` | `npm run build --workspaces` | `vite build && tsc --emitDeclarationOnly` | N/A |
 | `clean` | `npm run clean --workspaces && npm run clean:root` | `rimfaf dist` | `clean:root` |
-| `format` | `eslint --fix .` | `eslint --fix .` | N/A |
-| `lint` | `eslint .` | `eslint .` | N/A |
+| `format` | `eslint --fix` | `eslint --fix` | N/A |
+| `format:package` | `sort-package-json ./package.json ./packages/*/package.json` | `sort-package-json` | N/A |
+| `lint` | `eslint` | `eslint .` | N/A |
 | `test` | `vitest run` | `vitest run` | N/A |
 | `test:watch` | `vitest watch` | `vitest watch` | N/A |
 | `test:<package>:watch` | `npm run test:watch --workspace packages/<package>` |  | N/A |
@@ -51,4 +52,4 @@ Report what ways it deviates from the stated ideal.
 
 ### Possible Commands
 
-* "Add clean scripts for aider" implies the user wants `clean:aider` to `rimraf .aider.*.history .aider.*.history.* .aider.*.cache.* .aider.*.cache`
+* For example, if the user says "Add clean scripts for aider" that implies the user wants `clean:aider` to `rimraf .aider.*.history .aider.*.history.* .aider.*.cache.* .aider.*.cache` (do not do this by default)
