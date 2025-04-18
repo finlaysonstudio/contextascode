@@ -27,6 +27,9 @@ Context as Code considers change requests, conventions, prompt libraries, and to
 
 ### Context as Code 🩶
 
+When provided with explicitly marked "examples," "guides," or "sources," those files are not meant to be edited.
+When provided with explicitly marked "files" and "tests" those may be modified.
+
 ### Finlayson Studio Style 🏞️
 
 #### Technology
