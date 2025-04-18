@@ -8,7 +8,7 @@ You will assist setting up a new TypeScript project for the user
 * NPM workspaces within ./packages/
 * ESLint and Prettier
 * Vite to bundle TypeScript
-* Vitest
+* Vitest with .spec sibling files
 
 ## 📋 Suggested Process
 
@@ -65,6 +65,9 @@ You will assist setting up a new TypeScript project for the user
    npm install -D eslint@9 prettier@latest eslint-config-prettier@latest
    npm install -D @typescript-eslint/eslint-plugin@latest @typescript-eslint/parser@latest
    npm install -D eslint-plugin-prettier@latest
+   
+   # Install additional dev dependencies from Ideal Project Structure
+   npm install -D rimraf sort-package-json tsx
    ```
 
 ### ⚙️ Configure
@@ -166,9 +169,14 @@ export default tseslint.config(
   ],
   "scripts": {
     "build": "npm run build --workspaces",
-    "test": "npm run test --workspaces",
-    "lint": "npm run lint --workspaces",
-    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\""
+    "clean": "npm run clean --workspaces && npm run clean:root",
+    "clean:root": "rimraf node_modules",
+    "format": "eslint --fix",
+    "format:package": "sort-package-json ./package.json ./packages/*/package.json",
+    "lint": "eslint",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "typecheck": "npm run typecheck --workspaces"
   }
 }
 EOF
@@ -182,10 +190,12 @@ EOF
   "types": "dist/index.d.ts",
   "type": "module",
   "scripts": {
-    "build": "vite build",
+    "build": "vite build && tsc --emitDeclarationOnly",
+    "clean": "rimraf dist",
+    "format": "eslint --fix",
+    "lint": "eslint .",
     "test": "vitest run",
-    "test:watch": "vitest",
-    "lint": "eslint src --ext .ts",
+    "test:watch": "vitest watch",
     "typecheck": "tsc --noEmit"
   }
 }
@@ -204,8 +214,8 @@ EOF
 
 13. **Create test files**:
     ```bash
-    mkdir -p packages/<package-folder>/tests
-    touch packages/<package-folder>/tests/index.test.ts
+    # Create test file as sibling to implementation file
+    touch packages/<package-folder>/src/index.spec.ts
     ```
 
 14. **Install all dependencies**:
