@@ -23,6 +23,21 @@
 5. Report the results in the verification block
 6. Report any concerns from previous steps in the optional concerns statement
 
+### Cleanup
+
+* If the task is complete but was left in the Processing section, move it to Complete
+* Make sure the task is in the 03_complete directory
+* Delete any copies of the task in 02_processing
+* run `npm install`
+
+### STOP ⏹️
+
+Exit once the verification process is complete.
+
+<Forbidden>
+Do not execute a new task.
+</Forbidden>
+
 ## 📝 Guidance
 
 ### Example "Concerns"
