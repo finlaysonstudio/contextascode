@@ -1,14 +1,18 @@
 import { defineConfig } from "vite";
+import { resolve } from "path";
 
 export default defineConfig({
   build: {
     lib: {
-      entry: "src/index.ts",
-      formats: ["es", "cjs"],
-      fileName: (format) => `index.${format === "es" ? "js" : "cjs"}`,
+      entry: {
+        index: resolve(__dirname, "src/index.ts"),
+        cli: resolve(__dirname, "src/cli.ts"),
+      },
+      formats: ["es"],
+      fileName: (format, entryName) => `${entryName}.js`,
     },
     rollupOptions: {
-      external: [],
+      external: ["commander"],
     },
   },
 });

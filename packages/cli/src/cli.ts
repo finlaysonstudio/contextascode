@@ -18,7 +18,10 @@ export function createCli(): Command {
 }
 
 // Execute CLI when run directly
-if (import.meta.url === import.meta.resolve("./cli.js")) {
+if (
+  import.meta.url.endsWith("/cli.js") ||
+  process.argv[1]?.endsWith("/cli.js")
+) {
   const program = createCli();
   program.parse(process.argv);
 }
