@@ -8,12 +8,12 @@ import { getVersion } from './index.js';
 
 export function createCli() {
   const program = new Command();
-  
+
   program
     .name('@contextascode/cli')
     .description('Context as Code CLI tool')
     .version(getVersion());
-  
+
   return program;
 }
 
