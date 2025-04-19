@@ -8,12 +8,13 @@ Divide a complex objective into a plan or sequence of tasks.
 <Sources>
 
 </Sources>
-<Output>./context/plans/${name}</Output>
+<Output>./context/changelog/plans/${name}</Output>
 ```
 
 An idea or change requested, described or tagged with `<Sources>`.
 
-A directory to output the plan, described or tagged with `<Directory>`, `<Output>`, etc; otherwise create a new directory `./context/plans/${name}`
+A directory to output the plan, described or tagged with `<Directory>`, `<Output>`, etc; otherwise create a new directory `./context/changelog/plans/${name}`.
+If no name is provided and the request is following a numeric sequence to begin its filename (e.g., 012_Feature.md or 2025_01_02_Fix.md), begin name with that same numeric sequence.
 
 ## 📤 Expected Output Artifacts
 
@@ -21,7 +22,7 @@ A directory to output the plan, described or tagged with `<Directory>`, `<Output
 * `observations.md`
 * `plan.md` with `<Pending>`, `<Processing>`, `<Complete>`
 * `01_pending/`
-* `${NNNN}_${Task}.md` change request detailing each task
+* `${NNNN}_${TaskName}.md` change request detailing each task
 * `02_processing/`
 * `03_complete/`
 * As needed `04_incomplete/`, `00_backlog/`, `context.md`
@@ -67,7 +68,7 @@ Continue if previous steps were completed previously.
 
 ### 3. Create Task Files
 
-For each task create a file named `${NNNN}_${Task}.md` inside `01_pending/`.
+For each task create a file named `${NNNN}_${TaskName}.md` inside `01_pending/`.
 Only use alphanumerics, dashes, periods, and underscores for the filename.
 Omit non-alphanumerics or convert them to underscores.
 Prefer underscore as the non-alphanumeric of choice.
@@ -174,12 +175,12 @@ N/A
 </Complete>
 ```
 
-### Sample ${NNNN}_${Task}.md
+### Sample ${NNNN}_${TaskName}.md
 
 Omit unused sections.
 
 ```markdown
-# "{name}" Task 🎟️
+# "{TaskName}" Task 🎟️
 
 <Description>
 {description}
@@ -192,10 +193,6 @@ Omit unused sections.
 <Tests>
 {tests}
 </Tests>
-
-<Pretests>
-{pretests}
-</Pretests>
 ```
 
 ## 📋 Instructions
