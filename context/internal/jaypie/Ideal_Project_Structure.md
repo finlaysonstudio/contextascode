@@ -4,7 +4,7 @@ Specification for an ideal project structure
 
 ## ✈️ Overview
 
-* ESLint + Prettier
+* ESLint 9+ with Prettier
 * Jaypie project opinions and tooling
 * NPM with Workspaces ("monorepo")
 * TypeScript
