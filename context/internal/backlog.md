@@ -2,7 +2,6 @@
 
 ## ☑️ Action Items
 
-- Create a new TypeScript project
 - Create a new Jaypie project
 - bin/codex new change
 - Write "Finlayson Studio Style", 
