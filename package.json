@@ -8,12 +8,15 @@
   ],
   "scripts": {
     "build": "npm run build --workspaces",
+    "clean": "npm run clean --workspaces && npm run clean:root",
+    "clean:root": "rimraf node_modules",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "lint": "eslint",
-    "format": "eslint --fix",
-    "type-check": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "eslint --fix .",
+    "format:package": "sort-package-json ./package.json ./packages/*/package.json",
+    "typecheck": "npm run typecheck --workspaces",
     "dev": "vite"
   },
   "devDependencies": {

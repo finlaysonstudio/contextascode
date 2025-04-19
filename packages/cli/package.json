@@ -9,11 +9,13 @@
     "contextascode": "dist/cli.js"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "vite build && tsc --emitDeclarationOnly",
+    "clean": "rimraf dist",
     "test": "vitest run",
     "test:watch": "vitest",
-    "lint": "eslint src --ext .ts",
-    "format": "prettier --write \"src/**/*.ts\""
+    "lint": "eslint .",
+    "format": "eslint --fix .",
+    "typecheck": "tsc --noEmit"
   },
   "files": [
     "dist"

@@ -30,3 +30,24 @@ Configure package scripts according to the ideal project structure.
 - Verify scripts are properly configured in both package.json files
 - Test each script to ensure it works as expected
 </Tests>
+
+---
+
+<Results>
+Successfully updated package scripts in both root package.json and packages/cli/package.json:
+
+1. Root package.json:
+   - Added clean and clean:root scripts
+   - Updated format script to include target path
+   - Added format:package script
+   - Added typecheck script
+   - Updated lint script to include target path
+
+2. CLI package.json:
+   - Updated build script to use Vite and TypeScript declaration files
+   - Added clean script
+   - Updated format script to use ESLint
+   - Added typecheck script
+
+All scripts are now properly configured according to the task requirements.
+</Results>
