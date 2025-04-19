@@ -14,6 +14,7 @@ Program "almost exclusively" (99%) writing plain language in `/context`
 * Will it process from a backlog?
 * Can it incorporate bivvy? Should it?
 * Can I get it to "think about" its own mission, and document pros and cons as history?
+* How often does Aider end with commands to run?
 
 ### Answers
 
