@@ -9,8 +9,9 @@
   - Take from what is in ./context/readme.md
   - Apply "Finlayson Studio Style" it to ./README.md
 - Start Draider
-- A packaging system:
-  - context.md with frontmatter declaration (name, version, description, exclude, source: url to package, meta: <Any>)
+- Start Codex
+  - Context packaging system:
+    - context.md with frontmatter declaration (name, version, description, exclude, source: url to package, meta: <Any>)
 
 ## 🖇️ Context
 

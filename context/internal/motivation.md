@@ -27,3 +27,5 @@ Program "almost exclusively" (99%) writing plain language in `/context`
 
 * It is hard to get aider to stop.
 * It doesn't always move things to complete
+  * Sometimes it leaves a copy in progress in addition to complete
+  * Should execute be followed by "Clean?"
