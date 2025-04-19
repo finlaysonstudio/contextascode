@@ -13,6 +13,10 @@
   - Context packaging system:
     - context.md with frontmatter declaration (name, version, description, exclude, source: url to package, meta: <Any>)
 
+## 🚦 Parking Lot
+
+* How do I use @vitest/coverage-v8
+
 ## 🖇️ Context
 
 ### Instructions
