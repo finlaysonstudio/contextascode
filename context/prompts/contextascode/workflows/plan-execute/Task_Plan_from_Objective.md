@@ -58,14 +58,6 @@ Omit task details, those should be placed in task files.
 
 If there is additional context that, once provided, represents an order of magnitude difference in the ability to execute the plan or include critical information necessary for success, output those questions as context.md following the sample.
 
-### STOP ⏹️
-
-Ensure the previous steps are applied and saved.
-Record observations.
-If the previous steps were not applied, exit.
-Before exiting report to the user, "plan.md phase complete; awaiting instruction."
-Continue if previous steps were completed previously.
-
 ### 3. Create Task Files
 
 For each task create a file named `${NNNN}_${TaskName}.md` inside `01_pending/`.
@@ -74,7 +66,11 @@ Omit non-alphanumerics or convert them to underscores.
 Prefer underscore as the non-alphanumeric of choice.
 
 Each task file should include a description.
+Task files must preserve all details from the source document.
+For example, if the source document suggests installing "@latest" and the task omits that distinction, it is likely the wrong version will be installed.
+Carry over any important commands, configurations, and steps from source document to the tasks.
 Task files may include additional details.
+
 Task files should include a test to verify the task was complete.
 Tests can be as simple as making sure a directory exists or a new string is found in a file.
 
