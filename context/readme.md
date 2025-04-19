@@ -20,15 +20,15 @@ Context as Code considers change requests, conventions, prompt libraries, and to
 ## 🗣️ Prompts and Context
 
 * ./context/changelog/*.md - change requests
-* ./context/prompts/*.md - prompt library
-* ./context/prompts/jaypie/*.md - Jaypie guides
+* ./context/prompts/**/*.md - prompt library
 
 ## 📙 Conventions
 
 ### Context as Code 🩶
 
-When provided with explicitly marked "examples," "guides," or "sources," those files are not meant to be edited.
-When provided with explicitly marked "files" and "tests" those may be modified.
+Markdown with frontmatter for metadata and semantic xml tagging navigable by code generation agents and readable by humans.
+Materials tagged "`<Examples>`," "`<Guides>`," or "`<Sources>`," are not meant to be edited.
+Materials tagged "`<Examples>`" and "`<Tests>`" those may be modified.
 
 ### Finlayson Studio Style 🏞️
 
