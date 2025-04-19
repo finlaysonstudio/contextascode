@@ -9,7 +9,6 @@ You will assist setting up a new TypeScript project for the user
 * ESLint and Prettier
 * Vite to bundle TypeScript
 * Vitest with .spec sibling files
-* Commander.js for CLI applications
 
 ## 📋 Suggested Process
 
@@ -177,7 +176,7 @@ EOF
    # Update root package.json scripts
    cat > package.json << EOF
 {
-  "name": "@contextascode/monorepo",
+  "name": "your-project-name",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -201,14 +200,11 @@ EOF
    # Update package-specific package.json scripts
    cat > packages/<package-folder>/package.json << EOF
 {
-  "name": "@contextascode/cli",
+  "name": "your-package-name",
   "version": "1.0.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
-  "bin": {
-    "contextascode": "dist/cli.js"
-  },
   "scripts": {
     "build": "vite build && tsc --emitDeclarationOnly",
     "clean": "rimraf dist",
