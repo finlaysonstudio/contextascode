@@ -10,6 +10,10 @@
     "build": "npm run build --workspaces",
     "test": "npm run test --workspaces",
     "lint": "npm run lint --workspaces",
-    "format": "npm run format --workspaces"
+    "format": "npm run format --workspaces",
+    "type-check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
   }
 }
