@@ -29,3 +29,4 @@ Program "almost exclusively" (99%) writing plain language in `/context`
 * It doesn't always move things to complete
   * Sometimes it leaves a copy in progress in addition to complete
   * Should execute be followed by "Clean?"
+* I wrote "Confirm Project Status Green" but it is an entirely human document
