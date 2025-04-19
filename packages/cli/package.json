@@ -1,0 +1,28 @@
+{
+  "name": "@contextascode/cli",
+  "version": "0.1.0",
+  "description": "Command-line interface for Context as Code",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "contextascode": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint src --ext .ts",
+    "format": "prettier --write \"src/**/*.ts\""
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "cli",
+    "context",
+    "documentation"
+  ],
+  "author": "",
+  "license": "MIT"
+}

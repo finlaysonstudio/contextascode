@@ -56,6 +56,11 @@ Only one task may be in `<Processing>` at a time.
 Do not complete more than one task.
 </Forbidden>
 
+Make sure to move the completed task from
+`<Processing>` to `<Complete>` in the plan
+and
+`02_processing` to `03_complete` in the directory
+
 ## 📝 Guidance
 
 * Do not reorder tasks unless directed
