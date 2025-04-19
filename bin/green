@@ -1,0 +1,9 @@
+#!/bin/bash
+
+npm install
+npm out
+npm run build
+npm run lint
+npm run test
+npm run type-check
+ls ./context/changelog/plans/*/02_processing
