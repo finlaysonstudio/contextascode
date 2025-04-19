@@ -1,4 +1,4 @@
-# Motivation 🎯
+# Motivation ⛽️
 
 Program "almost exclusively" (99%) writing plain language in `/context`
 
@@ -26,3 +26,4 @@ Program "almost exclusively" (99%) writing plain language in `/context`
 ## Observations
 
 * It is hard to get aider to stop.
+* It doesn't always move things to complete
