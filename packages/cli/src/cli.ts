@@ -6,7 +6,7 @@
 import { Command } from 'commander';
 import { getVersion } from './index.js';
 
-export function createCli() {
+export function createCli(): Command {
   const program = new Command();
 
   program
