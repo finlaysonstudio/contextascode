@@ -5,5 +5,5 @@ npm out
 npm run build
 npm run lint
 npm run test
-npm run type-check
+npm run typecheck
 ls ./context/changelog/plans/*/02_processing
