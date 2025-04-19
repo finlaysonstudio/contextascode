@@ -24,5 +24,8 @@
     "documentation"
   ],
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^13.1.0"
+  }
 }
