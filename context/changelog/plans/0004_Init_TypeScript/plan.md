@@ -17,7 +17,6 @@ The project will be set up as a monorepo with NPM workspaces, with a CLI package
 
 <Pending>
 ### Pending
-* Configure ESLint and Prettier
 * Set up Vite and Vitest
 * Create CLI package with commander
 * Implement basic CLI functionality
@@ -34,4 +33,5 @@ N/A
 ### Complete
 * Initialize project structure and root package.json
 * Set up TypeScript configuration
+* Configure ESLint and Prettier
 </Complete>
