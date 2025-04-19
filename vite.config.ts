@@ -6,16 +6,16 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'packages/cli/src/index.ts'),
       name: 'contextascode',
-      fileName: 'contextascode'
+      fileName: 'contextascode',
     },
     rollupOptions: {
       external: ['commander'],
       output: {
         globals: {
-          commander: 'commander'
-        }
-      }
-    }
+          commander: 'commander',
+        },
+      },
+    },
   },
   test: {
     globals: true,
@@ -23,7 +23,7 @@ export default defineConfig({
     include: ['**/*.spec.ts'],
     coverage: {
       reporter: ['text', 'json', 'html'],
-      exclude: ['**/node_modules/**', '**/dist/**']
-    }
-  }
+      exclude: ['**/node_modules/**', '**/dist/**'],
+    },
+  },
 });
