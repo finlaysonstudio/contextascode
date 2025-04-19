@@ -7,6 +7,9 @@ export default [
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
   {
+    ignores: ['**/node_modules/**', '**/dist/**', '**/build/**'],
+  },
+  {
     files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {
       parser: tseslint.parser,
