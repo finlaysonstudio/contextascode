@@ -21,3 +21,7 @@ Program "almost exclusively" (99%) writing plain language in `/context`
   * Yes, it will try
 * Will it generate aider conf?
   * Not easily, aider gets in the way of that by adding .aider* to .gitignore and I do not want to fight aider
+
+## Observations
+
+* It is hard to get aider to stop.
