@@ -1,8 +1,10 @@
 ```sh
 npm install
 npm out
+npm run build
 npm run lint
 npm run test
+npm run type-check
 ls ./context/changelog/plans/*/02_processing
 #draider foreach ./context/changelog/plans/*/02_processing run COMPLETE_TASK_PROCESSING.MD
 #draider foreach ./context/changelog/plans/*/plan.md run CONFIRM_PLAN_STATUS.MD
