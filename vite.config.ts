@@ -1,29 +1,29 @@
-import { defineConfig } from 'vite';
-import { resolve } from 'path';
+import { defineConfig } from "vite";
+import { resolve } from "path";
 
 export default defineConfig({
   build: {
     lib: {
-      entry: resolve(__dirname, 'packages/cli/src/index.ts'),
-      name: 'contextascode',
-      fileName: 'contextascode',
+      entry: resolve(__dirname, "packages/cli/src/index.ts"),
+      name: "contextascode",
+      fileName: "contextascode",
     },
     rollupOptions: {
-      external: ['commander'],
+      external: ["commander"],
       output: {
         globals: {
-          commander: 'commander',
+          commander: "commander",
         },
       },
     },
   },
   test: {
     globals: true,
-    environment: 'node',
-    include: ['**/*.spec.ts'],
+    environment: "node",
+    include: ["**/*.spec.ts"],
     coverage: {
-      reporter: ['text', 'json', 'html'],
-      exclude: ['**/node_modules/**', '**/dist/**'],
+      reporter: ["text", "json", "html"],
+      exclude: ["**/node_modules/**", "**/dist/**"],
     },
   },
 });
