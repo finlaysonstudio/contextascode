@@ -38,7 +38,12 @@ If no name is provided and the request is following a numeric sequence to begin 
 
 ## ☑ Process
 
-### 1. Write Plan Guidance
+### 1. Start Plan Document
+
+Provide a terse, direct description after the heading.
+
+Restate objective in plan.
+Clarify original objective if possible.
 
 Guidance should include any context needed for the execution of any given task.
 Assume audience, most likely a code generation agent, can understand technical domain terminology and execute instructions but has literally zero experience with this repository.
@@ -48,7 +53,7 @@ Only include guidance valuable to the audience; pro-forma guidance like "always 
 
 Create Task Board to update the workflow progresses.
 
-### 2. Write Plan Tasks
+### 2. Add Plan Tasks
 
 Carefully consider the order tasks must be completed.
 The scope of each task should be executable in 2-3 turns with a code generation agent applying diffs and calling tools.
@@ -133,12 +138,18 @@ Oldest at top, append newest.
 ### Sample plan.md
 
 Markdown with semantic xml tagging.
+Terse, direct description.
 
 ```markdown
 # "{name}" Plan 📋
 <Description>
 {description}
 </Description>
+
+## 🎯 Objectives
+<Objectives>
+{objectives}
+</Objectives>
 
 ## ↔️ Guidance
 
@@ -196,10 +207,4 @@ Omit unused sections.
 * Read context.md if available, ignore if only a heading
 * If context.md has answers, incorporate those answers into the plan or tasks
 * Once incorporated, delete the questions and answers leaving only the heading
-* If incorporated, STOP, report to user "context.md incorporated; awaiting instruction"
 * If context.md is unanswered questions warn the user, "Proceeding with unanswered questions in context.md"
-
-* Follow this guide until a stopping point
-* Report to the user and optionally records observations at stopping points
-* When resuming work, skip step sections and begin at the first incomplete step
-* Continue work until the next stopping point
