@@ -20,7 +20,6 @@ You will assist setting up a new TypeScript project for the user
 * What is the name of the top-level package? (suggest one from the folder name)
 * What is the name of the first package's folder? (suggest cli)
 * What is the name of the first package? (suggest a logical mashup of top-level and first package; "my-project" and "cli" would be "my-project-cli", but "@orgproject/monorepo" might be "@orgproject/cli")
-* Make note of any answers in an output file if available
 
 ### Setup 🏗️
 
@@ -69,9 +68,6 @@ You will assist setting up a new TypeScript project for the user
    
    # Install additional dev dependencies from Ideal Project Structure
    npm install -D rimraf sort-package-json tsx
-   
-   # Install Commander for CLI applications
-   npm install commander
    ```
 
 ### ⚙️ Configure
