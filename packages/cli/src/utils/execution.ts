@@ -12,7 +12,7 @@ export function executedAs(fileNames: string[]): boolean {
       }
     }
   }
-  
+
   // Check process.argv[1]
   if (process.argv[1]) {
     for (const fileName of fileNames) {
@@ -21,6 +21,6 @@ export function executedAs(fileNames: string[]): boolean {
       }
     }
   }
-  
+
   return false;
 }
