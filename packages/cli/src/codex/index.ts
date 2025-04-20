@@ -5,6 +5,7 @@
 
 import { Command } from "commander";
 import { getVersion } from "../index.js";
+import { newCommand } from "./commands/new.js";
 
 export function createCodexCli(): Command {
   const program = new Command();
@@ -13,6 +14,9 @@ export function createCodexCli(): Command {
     .name("codex")
     .description("Codex CLI tool for Context as Code")
     .version(getVersion());
+
+  // Add commands
+  newCommand(program);
 
   return program;
 }
