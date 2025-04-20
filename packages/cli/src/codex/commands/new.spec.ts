@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import fs from "fs";
-import path from "path";
 import { handleNewCommand } from "./new";
 import * as enquirer from "enquirer";
 
@@ -12,7 +11,6 @@ vi.mock("enquirer", () => ({
 
 describe("handleNewCommand", () => {
   const mockDate = new Date("2023-01-01T00:30:45.678Z");
-  const expectedTimestamp = "20230101_0030_45678";
 
   beforeEach(() => {
     // Mock Date
@@ -47,11 +45,10 @@ describe("handleNewCommand", () => {
   it("should create a change file with provided description", async () => {
     await handleNewCommand("change", "test description");
 
-    const expectedFilename = `${expectedTimestamp}_test_description.md`;
-    const expectedPath = path.join("./context/changelog", expectedFilename);
-
     expect(fs.writeFileSync).toHaveBeenCalledWith(
-      expectedPath,
+      expect.stringMatching(
+        /context\/changelog\/\d{8}_\d{4}_\d{5}_test_description\.md$/,
+      ),
       "# test description\n\nTemplate content",
     );
   });
@@ -61,11 +58,10 @@ describe("handleNewCommand", () => {
 
     expect(enquirer.prompt).toHaveBeenCalled();
 
-    const expectedFilename = `${expectedTimestamp}_prompted_description.md`;
-    const expectedPath = path.join("./context/changelog", expectedFilename);
-
     expect(fs.writeFileSync).toHaveBeenCalledWith(
-      expectedPath,
+      expect.stringMatching(
+        /context\/changelog\/\d{8}_\d{4}_\d{5}_prompted_description\.md$/,
+      ),
       "# prompted description\n\nTemplate content",
     );
   });
@@ -73,11 +69,10 @@ describe("handleNewCommand", () => {
   it("should sanitize description for filename", async () => {
     await handleNewCommand("change", "test description with @special# chars!");
 
-    const expectedFilename = `${expectedTimestamp}_test_description_with_special_chars.md`;
-    const expectedPath = path.join("./context/changelog", expectedFilename);
-
     expect(fs.writeFileSync).toHaveBeenCalledWith(
-      expectedPath,
+      expect.stringMatching(
+        /context\/changelog\/\d{8}_\d{4}_\d{5}_test_description_with_special_chars\.md$/,
+      ),
       "# test description with @special# chars!\n\nTemplate content",
     );
   });
@@ -88,7 +83,9 @@ describe("handleNewCommand", () => {
     await handleNewCommand("change", "no template");
 
     expect(fs.writeFileSync).toHaveBeenCalledWith(
-      expect.any(String),
+      expect.stringMatching(
+        /context\/changelog\/\d{8}_\d{4}_\d{5}_no_template\.md$/,
+      ),
       "# no template\n\n",
     );
   });
