@@ -30,7 +30,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "commander": "^13.1.0",
-    "enquirer": "^2.4.1"
+    "@inquirer/prompts": "^7.4.1",
+    "commander": "^13.1.0"
   }
 }
