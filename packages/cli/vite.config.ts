@@ -6,8 +6,8 @@ export default defineConfig({
     lib: {
       entry: {
         index: resolve(__dirname, "src/index.ts"),
-        codex: resolve(__dirname, "src/codex.ts"),
-        contextaider: resolve(__dirname, "src/contextaider.ts"),
+        codex: resolve(__dirname, "src/codex/index.ts"),
+        contextaider: resolve(__dirname, "src/contextaider/index.ts"),
       },
       formats: ["es"],
       fileName: (format, entryName) => `${entryName}.js`,
