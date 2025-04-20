@@ -8,8 +8,9 @@
   ],
   "scripts": {
     "build": "npm run build --workspaces",
+    "clean:aider": "rimraf .aider.*.history*",
     "clean": "npm run clean --workspaces && npm run clean:root",
-    "clean:root": "rimraf node_modules",
+    "clean:root": "npm run clean:aider",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
@@ -32,6 +33,7 @@
     "eslint-plugin-prettier": "^5.2.6",
     "jest-extended": "^4.0.2",
     "prettier": "^3.5.3",
+    "rimraf": "^6.0.1",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.30.1",
     "vite": "^6.3.2",
