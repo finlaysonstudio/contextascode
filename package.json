@@ -14,8 +14,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "lint": "eslint .",
-    "format": "eslint --fix .",
+    "lint": "eslint --quiet .",
+    "format": "eslint --fix --quiet .",
     "format:package": "sort-package-json ./package.json ./packages/*/package.json",
     "typecheck": "npm run typecheck --workspaces",
     "dev": "vite"
