@@ -6,6 +6,7 @@
 import { Command } from "commander";
 import { getVersion } from "../index.js";
 import { newCommand } from "./commands/new.js";
+import { executedAs } from "../utils/execution.js";
 
 export function createCodexCli(): Command {
   const program = new Command();
@@ -22,10 +23,7 @@ export function createCodexCli(): Command {
 }
 
 // Execute CLI when run directly
-if (
-  import.meta.url.endsWith("/index.js") ||
-  process.argv[1]?.endsWith("/index.js")
-) {
+if (executedAs(["index.js", "codex.js"])) {
   const program = createCodexCli();
   program.parse(process.argv);
 }

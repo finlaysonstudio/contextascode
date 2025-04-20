@@ -5,6 +5,7 @@
 
 import { Command } from "commander";
 import { getVersion } from "../index.js";
+import { executedAs } from "../utils/execution.js";
 
 export function createContextAiderCli(): Command {
   const program = new Command();
@@ -18,10 +19,7 @@ export function createContextAiderCli(): Command {
 }
 
 // Execute CLI when run directly
-if (
-  import.meta.url.endsWith("/index.js") ||
-  process.argv[1]?.endsWith("/index.js")
-) {
+if (executedAs(["index.js", "contextaider.js"])) {
   const program = createContextAiderCli();
   program.parse(process.argv);
 }
