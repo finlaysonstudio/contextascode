@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Command } from "commander";
 import { input } from "@inquirer/prompts";
 import fs from "fs";
