@@ -6,7 +6,6 @@ export default defineConfig({
     lib: {
       entry: {
         index: resolve(__dirname, "src/index.ts"),
-        cli: resolve(__dirname, "src/cli.ts"),
         codex: resolve(__dirname, "src/codex.ts"),
         contextaider: resolve(__dirname, "src/contextaider.ts"),
       },
