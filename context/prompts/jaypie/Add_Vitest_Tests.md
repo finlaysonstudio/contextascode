@@ -5,7 +5,7 @@ Adds unit tests for a JavaScript or TypeScript file.
 ## Requirements
 
 - Use **Vitest** for all test files.
-- Create a new test file in a sibling `__tests__` directory (e.g. `../__tests__/myFunction.test.js`).
+- Create a new test file `myFunction.spec.js` next to the implementation, not a separate tree or subdirectory
 - Use **ECMAScript module syntax** (`import/export`), not CommonJS.
 - Import the function under test using a relative path and include the `.js` extension.
 - Use `describe` blocks for each function and `it` blocks for each behavior.
