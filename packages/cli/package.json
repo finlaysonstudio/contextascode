@@ -6,7 +6,8 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "contextascode": "dist/cli.js"
+    "codex": "dist/codex.js",
+    "contextaider": "dist/contextaider.js"
   },
   "scripts": {
     "build": "vite build && tsc --emitDeclarationOnly",

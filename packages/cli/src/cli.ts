@@ -1,27 +1,20 @@
-#!/usr/bin/env node
 /**
- * Command-line interface for Context as Code
+ * Common CLI functionality for Context as Code
+ * 
+ * This file contains shared functionality used by both
+ * the codex and contextaider CLI tools.
  */
 
 import { Command } from "commander";
 import { getVersion } from "./index.js";
 
-export function createCli(): Command {
+export function createCli(name: string, description: string): Command {
   const program = new Command();
 
   program
-    .name("@contextascode/cli")
-    .description("Context as Code CLI tool")
+    .name(name)
+    .description(description)
     .version(getVersion());
 
   return program;
-}
-
-// Execute CLI when run directly
-if (
-  import.meta.url.endsWith("/cli.js") ||
-  process.argv[1]?.endsWith("/cli.js")
-) {
-  const program = createCli();
-  program.parse(process.argv);
 }
