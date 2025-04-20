@@ -1,5 +1,5 @@
 import { Command } from "commander";
-import { prompt } from "enquirer";
+import { input } from "@inquirer/prompts";
 import fs from "fs";
 import path from "path";
 
@@ -27,14 +27,11 @@ export async function handleNewCommand(
   let finalDescription = description;
   if (!finalDescription) {
     try {
-      const response = await prompt<{ description: string }>({
-        type: "input",
-        name: "description",
+      finalDescription = await input({
         message: "Enter a description for the change:",
         validate: (value) =>
-          value.trim().length > 0 || "Description cannot be empty",
+          value.trim().length > 0 ? true : "Description cannot be empty",
       });
-      finalDescription = response.description;
     } catch (error) {
       console.error("Operation cancelled");
       process.exit(1);

@@ -1,12 +1,12 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import fs from "fs";
 import { handleNewCommand } from "./new";
-import * as enquirer from "enquirer";
+import * as inquirerPrompts from "@inquirer/prompts";
 
 // Mock dependencies
 vi.mock("fs");
-vi.mock("enquirer", () => ({
-  prompt: vi.fn(),
+vi.mock("@inquirer/prompts", () => ({
+  input: vi.fn(),
 }));
 
 describe("handleNewCommand", () => {
@@ -32,9 +32,7 @@ describe("handleNewCommand", () => {
     vi.mocked(fs.mkdirSync).mockImplementation(() => undefined);
 
     // Mock prompt
-    vi.mocked(enquirer.prompt).mockResolvedValue({
-      description: "prompted description",
-    });
+    vi.mocked(inquirerPrompts.input).mockResolvedValue("prompted description");
   });
 
   afterEach(() => {
@@ -56,7 +54,7 @@ describe("handleNewCommand", () => {
   it("should prompt for description if not provided", async () => {
     await handleNewCommand("change");
 
-    expect(enquirer.prompt).toHaveBeenCalled();
+    expect(inquirerPrompts.input).toHaveBeenCalled();
 
     expect(fs.writeFileSync).toHaveBeenCalledWith(
       expect.stringMatching(
