@@ -2,15 +2,18 @@
 
 ## ☑️ Action Items
 
-- Create a new Jaypie project
-- bin/codex new change
+💡 Try a process where one changelog writes the next
+
+- `codex new change`
+- `codex new prompt`
+- codex internal configuration system (for new change, prompt)
+- `marxdown` reader
+- `contextaider` read markdown and feed it to aider
 - Write "Finlayson Studio Style", 
   - Take from what is in ./context/readme.md
-  - Apply "Finlayson Studio Style" it to ./README.md
-- Start Draider
-- Start Codex
-  - Context packaging system:
-    - context.md with frontmatter declaration (name, version, description, exclude, source: url to package, meta: <Any>)
+  - Apply "Finlayson Studio Style" to ./README.md
+- Codex Context packaging system:
+  - context.md with frontmatter declaration (name, version, description, exclude, source: url to package, meta: <Any>)
 
 ## 🚦 Parking Lot
 
