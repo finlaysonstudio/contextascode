@@ -18,12 +18,6 @@ export async function handleNewCommand(
     process.exit(1);
   }
 
-  // Only implement 'change' for now
-  if (type === "prompt") {
-    console.log("The 'prompt' type is not yet implemented.");
-    process.exit(0);
-  }
-
   // If description is not provided, prompt for it
   let finalDescription = description;
   if (!finalDescription) {
@@ -44,46 +38,76 @@ export async function handleNewCommand(
     .replace(/[^a-zA-Z0-9\s-]/g, "") // Remove non-alphanumeric chars (except spaces and dashes)
     .replace(/\s+/g, "_"); // Replace spaces with underscores
 
-  // Create timestamp
-  const now = new Date();
-  const timestamp = [
-    now.getFullYear(),
-    String(now.getMonth() + 1).padStart(2, "0"),
-    String(now.getDate()).padStart(2, "0"),
-    "_",
-    String(now.getHours()).padStart(2, "0"),
-    String(now.getMinutes()).padStart(2, "0"),
-    String(now.getSeconds()).padStart(2, "0"),
-    "_",
-    String(now.getMilliseconds()).padStart(3, "0"),
-  ].join("");
+  if (type === "change") {
+    // Create timestamp for change files
+    const now = new Date();
+    const timestamp = [
+      now.getFullYear(),
+      String(now.getMonth() + 1).padStart(2, "0"),
+      String(now.getDate()).padStart(2, "0"),
+      "_",
+      String(now.getHours()).padStart(2, "0"),
+      String(now.getMinutes()).padStart(2, "0"),
+      String(now.getSeconds()).padStart(2, "0"),
+      "_",
+      String(now.getMilliseconds()).padStart(3, "0"),
+    ].join("");
 
-  // Create filename
-  const filename = `${timestamp}_${sanitizedDescription}.md`;
-  const changelogDir = "./context/changelog";
-  const filePath = path.join(changelogDir, filename);
+    // Create filename with timestamp for changes
+    const filename = `${timestamp}_${sanitizedDescription}.md`;
+    const changelogDir = "./context/changelog";
+    const filePath = path.join(changelogDir, filename);
 
-  // Check if template exists
-  const templatePath = "./context/prompts/contextascode/templates/changelog.md";
-  let content = `# ${finalDescription}\n\n`;
+    // Check if template exists
+    const templatePath = "./context/prompts/contextascode/templates/changelog.md";
+    let content = `# ${finalDescription}\n\n`;
 
-  try {
-    if (fs.existsSync(templatePath)) {
-      const template = fs.readFileSync(templatePath, "utf8");
-      content = template.replace(/\{\{\s*message\s*\}\}/g, finalDescription);
+    try {
+      if (fs.existsSync(templatePath)) {
+        const template = fs.readFileSync(templatePath, "utf8");
+        content = template.replace(/\{\{\s*message\s*\}\}/g, finalDescription);
+      }
+
+      // Ensure the changelog directory exists
+      if (!fs.existsSync(changelogDir)) {
+        fs.mkdirSync(changelogDir, { recursive: true });
+      }
+
+      // Write the file
+      fs.writeFileSync(filePath, content);
+      console.log(`Created changelog file: ${filePath}`);
+    } catch (error) {
+      console.error(`Error creating changelog file: ${error}`);
+      process.exit(1);
     }
+  } else if (type === "prompt") {
+    // Create filename for prompts (no timestamp)
+    const filename = `${sanitizedDescription}.md`;
+    const promptsDir = "./context/prompts";
+    const filePath = path.join(promptsDir, filename);
 
-    // Ensure the changelog directory exists
-    if (!fs.existsSync(changelogDir)) {
-      fs.mkdirSync(changelogDir, { recursive: true });
+    // Check if template exists
+    const templatePath = "./context/prompts/contextascode/templates/prompt.md";
+    let content = `# ${finalDescription}\n\n`;
+
+    try {
+      if (fs.existsSync(templatePath)) {
+        const template = fs.readFileSync(templatePath, "utf8");
+        content = template.replace(/\$\{title\}/g, finalDescription);
+      }
+
+      // Ensure the prompts directory exists
+      if (!fs.existsSync(promptsDir)) {
+        fs.mkdirSync(promptsDir, { recursive: true });
+      }
+
+      // Write the file
+      fs.writeFileSync(filePath, content);
+      console.log(`Created prompt file: ${filePath}`);
+    } catch (error) {
+      console.error(`Error creating prompt file: ${error}`);
+      process.exit(1);
     }
-
-    // Write the file
-    fs.writeFileSync(filePath, content);
-    console.log(`Created changelog file: ${filePath}`);
-  } catch (error) {
-    console.error(`Error creating changelog file: ${error}`);
-    process.exit(1);
   }
 }
 
