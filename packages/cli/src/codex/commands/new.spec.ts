@@ -2,12 +2,36 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import fs from "fs";
 import { handleNewCommand } from "./new";
 import * as inquirerPrompts from "@inquirer/prompts";
+import * as helpers from "./helpers";
 
 // Mock dependencies
 vi.mock("fs");
 vi.mock("@inquirer/prompts", () => ({
   input: vi.fn(),
 }));
+vi.mock("./helpers", async () => {
+  const actual = await vi.importActual("./helpers");
+  return {
+    ...actual,
+    createSanitizedFilename: vi.fn((desc) => 
+      desc.replace(/[^a-zA-Z0-9\s-]/g, "").replace(/\s+/g, "_")),
+    generateTimestamp: vi.fn(() => "20230101_003045_678"),
+    ensureDirectoryExists: vi.fn(),
+    loadTemplate: vi.fn((path, replacements, defaultContent) => {
+      if (path.includes("changelog")) {
+        return `# ${replacements.message}\n\nTemplate content`;
+      } else if (path.includes("prompt")) {
+        return `# ${replacements.title}\n\nPrompt template`;
+      }
+      return defaultContent;
+    }),
+    createFile: vi.fn((path) => {
+      // Mock fs.writeFileSync to make the tests pass
+      vi.mocked(fs.writeFileSync).mockImplementation(() => undefined);
+      return path;
+    }),
+  };
+});
 
 describe("handleNewCommand", () => {
   const mockDate = new Date("2023-01-01T00:30:45.678Z");

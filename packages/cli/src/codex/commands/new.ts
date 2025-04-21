@@ -1,8 +1,14 @@
 /* eslint-disable no-console */
 import { Command } from "commander";
 import { input } from "@inquirer/prompts";
-import fs from "fs";
 import path from "path";
+import {
+  createSanitizedFilename,
+  generateTimestamp,
+  ensureDirectoryExists,
+  loadTemplate,
+  createFile,
+} from "./helpers";
 
 type NewCommandType = "change" | "prompt";
 
@@ -33,82 +39,80 @@ export async function handleNewCommand(
     }
   }
 
-  // Create filename from description
-  const sanitizedDescription = finalDescription
-    .replace(/[^a-zA-Z0-9\s-]/g, "") // Remove non-alphanumeric chars (except spaces and dashes)
-    .replace(/\s+/g, "_"); // Replace spaces with underscores
-
-  if (type === "change") {
-    // Create timestamp for change files
-    const now = new Date();
-    const timestamp = [
-      now.getFullYear(),
-      String(now.getMonth() + 1).padStart(2, "0"),
-      String(now.getDate()).padStart(2, "0"),
-      "_",
-      String(now.getHours()).padStart(2, "0"),
-      String(now.getMinutes()).padStart(2, "0"),
-      String(now.getSeconds()).padStart(2, "0"),
-      "_",
-      String(now.getMilliseconds()).padStart(3, "0"),
-    ].join("");
-
-    // Create filename with timestamp for changes
-    const filename = `${timestamp}_${sanitizedDescription}.md`;
-    const changelogDir = "./context/changelog";
-    const filePath = path.join(changelogDir, filename);
-
-    // Check if template exists
-    const templatePath = "./context/prompts/contextascode/templates/changelog.md";
-    let content = `# ${finalDescription}\n\n`;
-
-    try {
-      if (fs.existsSync(templatePath)) {
-        const template = fs.readFileSync(templatePath, "utf8");
-        content = template.replace(/\{\{\s*message\s*\}\}/g, finalDescription);
-      }
-
-      // Ensure the changelog directory exists
-      if (!fs.existsSync(changelogDir)) {
-        fs.mkdirSync(changelogDir, { recursive: true });
-      }
-
-      // Write the file
-      fs.writeFileSync(filePath, content);
-      console.log(`Created changelog file: ${filePath}`);
-    } catch (error) {
-      console.error(`Error creating changelog file: ${error}`);
-      process.exit(1);
+  // Create sanitized filename from description
+  const sanitizedDescription = createSanitizedFilename(finalDescription);
+  
+  try {
+    if (type === "change") {
+      await handleChangeFile(sanitizedDescription, finalDescription);
+    } else if (type === "prompt") {
+      await handlePromptFile(sanitizedDescription, finalDescription);
     }
-  } else if (type === "prompt") {
-    // Create filename for prompts (no timestamp)
-    const filename = `${sanitizedDescription}.md`;
-    const promptsDir = "./context/prompts";
-    const filePath = path.join(promptsDir, filename);
-
-    // Check if template exists
-    const templatePath = "./context/prompts/contextascode/templates/prompt.md";
-    let content = `# ${finalDescription}\n\n`;
-
-    try {
-      if (fs.existsSync(templatePath)) {
-        const template = fs.readFileSync(templatePath, "utf8");
-        content = template.replace(/\$\{title\}/g, finalDescription);
-      }
-
-      // Ensure the prompts directory exists
-      if (!fs.existsSync(promptsDir)) {
-        fs.mkdirSync(promptsDir, { recursive: true });
-      }
-
-      // Write the file
-      fs.writeFileSync(filePath, content);
-      console.log(`Created prompt file: ${filePath}`);
-    } catch (error) {
-      console.error(`Error creating prompt file: ${error}`);
-      process.exit(1);
-    }
+  } catch (error) {
+    console.error(`Error creating ${type} file: ${error}`);
+    process.exit(1);
   }
+}
+
+/**
+ * Handles the creation of a change file
+ */
+async function handleChangeFile(
+  sanitizedDescription: string,
+  finalDescription: string
+): Promise<void> {
+  const timestamp = generateTimestamp();
+  const filename = `${timestamp}_${sanitizedDescription}.md`;
+  const changelogDir = "./context/changelog";
+  const filePath = path.join(changelogDir, filename);
+  const templatePath = "./context/prompts/contextascode/templates/changelog.md";
+  
+  // Default content if template doesn't exist
+  const defaultContent = `# ${finalDescription}\n\n`;
+  
+  // Load template with replacements
+  const content = loadTemplate(
+    templatePath,
+    { message: finalDescription },
+    defaultContent
+  );
+  
+  // Ensure directory exists
+  ensureDirectoryExists(changelogDir);
+  
+  // Create the file
+  createFile(filePath, content);
+  console.log(`Created changelog file: ${filePath}`);
+}
+
+/**
+ * Handles the creation of a prompt file
+ */
+async function handlePromptFile(
+  sanitizedDescription: string,
+  finalDescription: string
+): Promise<void> {
+  const filename = `${sanitizedDescription}.md`;
+  const promptsDir = "./context/prompts";
+  const filePath = path.join(promptsDir, filename);
+  const templatePath = "./context/prompts/contextascode/templates/prompt.md";
+  
+  // Default content if template doesn't exist
+  const defaultContent = `# ${finalDescription}\n\n`;
+  
+  // Load template with replacements
+  const content = loadTemplate(
+    templatePath,
+    { title: finalDescription },
+    defaultContent
+  );
+  
+  // Ensure directory exists
+  ensureDirectoryExists(promptsDir);
+  
+  // Create the file
+  createFile(filePath, content);
+  console.log(`Created prompt file: ${filePath}`);
 }
 
 export function newCommand(program: Command): void {

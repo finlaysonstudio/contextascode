@@ -29,3 +29,24 @@ This will make the code more maintainable and easier to extend with new types in
 3. Check that the code size has been reduced by removing duplication.
 4. Verify that helper functions are properly exported and can be reused.
 </Tests>
+
+---
+
+<Results>
+Successfully extracted common logic into helper functions:
+
+1. Created a new `helpers.ts` file with the following functions:
+   - `createSanitizedFilename`: Sanitizes descriptions for filenames
+   - `generateTimestamp`: Creates timestamp strings for change files
+   - `ensureDirectoryExists`: Ensures directories exist before writing files
+   - `loadTemplate`: Loads and processes templates with replacements
+   - `createFile`: Creates files with error handling
+
+2. Refactored `handleNewCommand` to use these helper functions and split the implementation into two separate handler functions:
+   - `handleChangeFile`: Handles change file creation
+   - `handlePromptFile`: Handles prompt file creation
+
+3. Added comprehensive tests for all helper functions in a new `helpers.spec.ts` file
+
+All existing tests continue to pass with the new implementation. The code is now more maintainable and has less duplication. The helper functions are properly exported and can be reused in other parts of the codebase.
+</Results>

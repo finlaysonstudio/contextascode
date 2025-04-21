@@ -7,7 +7,6 @@ Refactor the new command implementation to improve code quality, maintainability
 
 <Queued>
 ### Queued
-* Extract common logic into helper functions #0001
 * Switch to async FS APIs #0002
 * Improve error handling #0003
 * Externalize configuration into constants or config object #0004
@@ -17,7 +16,7 @@ Refactor the new command implementation to improve code quality, maintainability
 
 <Dequeued>
 ### Dequeued
-N/A
+* Extract common logic into helper functions #0001
 </Dequeued>
 
 <Verified>
