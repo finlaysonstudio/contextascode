@@ -53,8 +53,8 @@ export async function handleNewCommand(
     "_",
     String(now.getHours()).padStart(2, "0"),
     String(now.getMinutes()).padStart(2, "0"),
-    "_",
     String(now.getSeconds()).padStart(2, "0"),
+    "_",
     String(now.getMilliseconds()).padStart(3, "0"),
   ].join("");
 

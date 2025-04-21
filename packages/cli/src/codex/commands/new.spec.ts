@@ -45,7 +45,7 @@ describe("handleNewCommand", () => {
 
     expect(fs.writeFileSync).toHaveBeenCalledWith(
       expect.stringMatching(
-        /context\/changelog\/\d{8}_\d{4}_\d{5}_test_description\.md$/,
+        /context\/changelog\/\d{8}_\d{6}_\d{3}_test_description\.md$/,
       ),
       "# test description\n\nTemplate content",
     );
@@ -58,7 +58,7 @@ describe("handleNewCommand", () => {
 
     expect(fs.writeFileSync).toHaveBeenCalledWith(
       expect.stringMatching(
-        /context\/changelog\/\d{8}_\d{4}_\d{5}_prompted_description\.md$/,
+        /context\/changelog\/\d{8}_\d{6}_\d{3}_prompted_description\.md$/,
       ),
       "# prompted description\n\nTemplate content",
     );
@@ -69,7 +69,7 @@ describe("handleNewCommand", () => {
 
     expect(fs.writeFileSync).toHaveBeenCalledWith(
       expect.stringMatching(
-        /context\/changelog\/\d{8}_\d{4}_\d{5}_test_description_with_special_chars\.md$/,
+        /context\/changelog\/\d{8}_\d{6}_\d{3}_test_description_with_special_chars\.md$/,
       ),
       "# test description with @special# chars!\n\nTemplate content",
     );
@@ -82,7 +82,7 @@ describe("handleNewCommand", () => {
 
     expect(fs.writeFileSync).toHaveBeenCalledWith(
       expect.stringMatching(
-        /context\/changelog\/\d{8}_\d{4}_\d{5}_no_template\.md$/,
+        /context\/changelog\/\d{8}_\d{6}_\d{3}_no_template\.md$/,
       ),
       "# no template\n\n",
     );
