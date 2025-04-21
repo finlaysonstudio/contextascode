@@ -1,22 +1,31 @@
 /**
+ * Options for executedAs function
+ */
+export interface ExecutedAsOptions {
+  /**
+   * Array of locations to search for the filename
+   * @default [import.meta.url, process.argv[1]]
+   */
+  search?: string[];
+}
+
+/**
  * Checks if the current file is being executed directly
  * @param fileNames Array of possible filenames that could be executing this code
+ * @param options Configuration options
  * @returns boolean indicating if the file is being executed directly
  */
-export function executedAs(fileNames: string[]): boolean {
-  // Check import.meta.url
-  if (import.meta.url) {
-    for (const fileName of fileNames) {
-      if (import.meta.url.endsWith(`/${fileName}`)) {
-        return true;
-      }
-    }
-  }
+export function executedAs(
+  fileNames: string[],
+  options?: ExecutedAsOptions,
+): boolean {
+  const searchLocations = options?.search || [import.meta.url, process.argv[1]];
 
-  // Check process.argv[1]
-  if (process.argv[1]) {
+  for (const location of searchLocations) {
+    if (!location) continue;
+
     for (const fileName of fileNames) {
-      if (process.argv[1].endsWith(`/${fileName}`)) {
+      if (location.endsWith(`${fileName}`)) {
         return true;
       }
     }
