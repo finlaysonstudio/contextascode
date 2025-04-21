@@ -30,6 +30,21 @@ aider  --read packages/cli/src/codex/commands/new.ts
 
 ## 🚦 Parking Lot
 
+```
+---
+change:
+file:
+files:
+guide:
+guides:
+navigation: # for context.md
+plan:
+read-only:
+read:
+ticket:
+---
+```
+
 * thinking: fast # short,fast,true|long,slow,heavy|none,never,no,false
   * _In fact,_ we should use the openai key to interpret the marxdown frontmatter config when it is outside norms
   * _In fact,_ we should do this on as many error catches as possible everywhere
