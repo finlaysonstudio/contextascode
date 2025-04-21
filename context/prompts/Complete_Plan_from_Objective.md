@@ -9,11 +9,8 @@ Take a partial plan with objectives and create a detailed implementation plan.
 
 ## 📤 Expected Output Artifacts
 
-* Updated `plan.md` with `<Queued>`, `<Dequeued>`, `<Verified>`
-* `queued/`
-* `${NNNN}_${TaskName}.md` change request detailing each task in queued
-* `dequeued/`
-* `verified/`
+* Update `plan.md` with `<Queued>`, `<Dequeued>`, `<Verified>` lifecycle board sections
+* Create a change request `${NNNN}_${TaskName}.md` detailing each task in the plan directory
 
 ## 💡 Definitions
 
@@ -30,32 +27,23 @@ Take a partial plan with objectives and create a detailed implementation plan.
 
 ### 1. Create Task Board
 
-Provide a terse, direct description after the heading.
-
-Restate objective in plan.
-Clarify original objective if possible.
-
-Guidance should include any context needed for the execution of any given task.
-Assume audience, most likely a code generation agent, can understand technical domain terminology and execute instructions but has literally zero experience with this repository.
-
-Guidance template (below) includes suggested topics as bulleted list.
-Only include guidance valuable to the audience; pro-forma guidance like "always consider performance" distracts from the main goal.
-
-Create Task Board to update the workflow progresses.
+Create Lifecycle Board to update the workflow progresses.
+Sample board available below.
 
 ### 2. Add Plan Tasks
 
-Carefully consider the order tasks must be completed.
+Consider what tasks must be accomplished to achieve the goal.
+Tasks are not a 1:1 mapping of objectives.
+Some outcomes require multiple sequential tasks to be completed.
 The scope of each task should be executable in 2-3 turns with a code generation agent applying diffs and calling tools.
+Carefully consider the order of tasks.
+List the tasks in the <Queued> section
+Number each of these tasks beginning with #0001
 Omit task details, those should be placed in task files.
-
-### Seek Clarification ONLY IF NECESSARY ⏸️
-
-If there is additional context that, once provided, represents an order of magnitude difference in the ability to execute the plan or include critical information necessary for success, output those questions as context.md following the sample.
 
 ### 3. Create Task Files
 
-For each task create a file named `${NNNN}_${TaskName}.md` inside `queued/`.
+For each task create a file named `${NNNN}_${TaskName}.md` in the plan directory 
 Only use alphanumerics, dashes, periods, and underscores for the filename.
 Omit non-alphanumerics or convert them to underscores.
 Prefer underscore as the non-alphanumeric of choice.
@@ -65,9 +53,14 @@ Task files must preserve all details from the source document.
 For example, if the source document suggests installing "@latest" and the task omits that distinction, it is likely the wrong version will be installed.
 Carry over any important commands, configurations, and steps from source document to the tasks.
 Task files may include additional details.
+Consider what would make this task more clear to a less-capable developer given the context of this change.
 
 Task files should include a test to verify the task was complete.
 Tests can be as simple as making sure a directory exists or a new string is found in a file.
+
+Create a Context section in the plan if there is not one.
+Add a <Changes></Changes> tag block to Context.
+List in YAML-style the file paths to each change request.
 
 ## ↔️ Guidance
 
@@ -78,7 +71,23 @@ Tests can be as simple as making sure a directory exists or a new string is foun
 
 ## 📎 Resources
 
-### Sample plan.md Lifecycle Board
+### Sample Plan Section: Context
+
+Generally last.
+Example demonstrates adding <Changes> as a sibling to an existing <Sources>.
+
+```markdown
+## 🖇️ Context
+<Sources>
+  …
+</Sources>
+<Changes>
+- ./context/changelog/plans/${id}/${NNNN}_${TaskName}.md
+- …
+</Changes>
+```
+
+### Sample Plan Section: Lifecycle Board
 
 Markdown with semantic xml tagging.
 Terse, direct descriptions.
@@ -94,24 +103,24 @@ Preserve everything before the first heading.
 ## 🗂️ Lifecycle Board
 
 <Queued>
-### Pending
-* {items}
+### Queued
+* {title} #{NNNN}
 </Queued>
 
 <Dequeued>
-### Processing
+### Dequeued
 N/A
 </Dequeued>
 
 <Verified>
-### Complete
+### Verified
 N/A
 </Verified>
 
 ## … Previous Headings
 ```
 
-### Sample ${NNNN}_${TaskName}.md
+### Sample Task ${NNNN}_${TaskName}.md
 
 Omit unused sections.
 
@@ -130,3 +139,8 @@ Omit unused sections.
 {tests}
 </Tests>
 ```
+
+## 🔄 Restatement
+
+* Update the Plan document `plan.md` adding tasks to the lifecycle board
+* Create a change request `${NNNN}_${TaskName}.md` detailing each task in the plan directory
