@@ -6,7 +6,9 @@
 
 - `codex new change`
 - `codex new prompt`
+- help me think about this: an internal configuration system
 - codex internal configuration system (for new change, prompt)
+- "Help me think about this: I would like codex to open the users editor after the command is run"
 - `marxdown` reader
 - `contextaider` read markdown and feed it to aider
 - Write "Finlayson Studio Style", 
