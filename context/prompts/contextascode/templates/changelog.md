@@ -1,8 +1,14 @@
 # {{ message }}
 
 ## 🎯 Goal
+<Goal>
 
-## 📋 Process
+</Goal>
+
+## ↔️ Guidance
+<Guidance>
+
+</Guidance>
 
 ## 🖇️ Context
 
