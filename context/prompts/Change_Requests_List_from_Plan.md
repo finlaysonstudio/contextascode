@@ -9,19 +9,20 @@ Take a partial plan with objectives and create a list of change requests.
 
 The completed plan is ready to create change request files from.
 
-## 📤 Expected Output Artifacts
-
-Update `plan.md` with `<Queued>`, `<Dequeued>`, `<Verified>` lifecycle board sections.
-Add tasks to Queued section of lifecycle board.
-
 ## ☑ Process
 
-### 1. Create Task Board
+### 1. Read Accompanying Documents
+
+Read the plan document, usually plan.md.
+Pay attention to Context from the plan, especially `<Sources>`.
+Read any tagged `<Files>`.
+List the contents of any tagged `<Directories>`.
+
+### 2. Add Plan Task Board
 
 Create Lifecycle Board to update the workflow progresses.
+Update `plan.md` with `<Queued>`, `<Dequeued>`, `<Verified>` lifecycle board sections.
 Sample board available below.
-
-### 2. Add Plan Tasks
 
 Consider what tasks must be accomplished to achieve the goal.
 Tasks are not a 1:1 mapping of objectives.
