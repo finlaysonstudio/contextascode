@@ -89,7 +89,7 @@ export async function handleNewCommand(
 
 export function newCommand(program: Command): void {
   program
-    .command("new <type>")
+    .command("new")
     .description("Create a new item (change or prompt)")
     .argument("<type>", "Type of item to create (change or prompt)")
     .argument("[description]", "Description of the item")

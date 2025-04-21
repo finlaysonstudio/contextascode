@@ -19,7 +19,7 @@ export function createContextAiderCli(): Command {
 }
 
 // Execute CLI when run directly
-if (executedAs(["index.js", "contextaider.js"])) {
+if (executedAs([".bin/contextaider", "contextaider.js"])) {
   const program = createContextAiderCli();
   program.parse(process.argv);
 }

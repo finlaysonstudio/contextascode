@@ -23,7 +23,7 @@ export function createCodexCli(): Command {
 }
 
 // Execute CLI when run directly
-if (executedAs(["index.js", "codex.js"])) {
+if (executedAs([".bin/codex", "codex.js"])) {
   const program = createCodexCli();
   program.parse(process.argv);
 }
