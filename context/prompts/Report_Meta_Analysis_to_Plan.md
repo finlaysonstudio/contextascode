@@ -1,9 +1,9 @@
 ---
-id: ${slug}
+id: ${slug} || slugify($something)
 PlansDirectory: DefaultPlansDirectory
 thinking: fast
 ---
-# Report Meta Analysis ♾️
+# Report Meta Analysis to Plan ♾️
 
 <ProblemStatement>
 Answer these questions:
