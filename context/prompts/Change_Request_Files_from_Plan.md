@@ -3,19 +3,16 @@ id: ${id}
 plan: ./context/changelog/plans/${id}/plan.md
 thinking: full
 ---
-# Complete Plan from Objective 📮
+# Create Detailed Individual Change Request Tickets 📮
 
-Take a partial plan with objectives and create a detailed implementation plan.
-
-## 📤 Expected Output Artifacts
-
-Create a change request file for each task in the plan directory.
+Take a complete plan, with individual change requests already proposed, and create individual files in the plan directory for each request.
 
 ## ☑ Process
 
 ### 1. Prepare Task File Destinations
 
 If there is a <Changes> block with task file paths, use those paths when creating the task files.
+
 If new files must be created, follow the pattern `${NNNN}_${TaskName}.md`
 Only use alphanumerics, dashes, periods, and underscores for the filename.
 Omit non-alphanumerics or convert them to underscores.
@@ -76,5 +73,4 @@ Omit unused sections.
 
 ## 🔄 Restatement
 
-* Update the Plan document `plan.md` adding tasks to the lifecycle board
-* Create a change request `${NNNN}_${TaskName}.md` detailing each task in the plan directory
+Create a change request `${NNNN}_${TaskName}.md` detailing each task in the plan directory
