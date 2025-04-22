@@ -31,3 +31,9 @@ This change will improve performance for file operations, especially in high-thr
 3. Confirm that both "change" and "prompt" commands still work as expected.
 4. Test with large files to ensure non-blocking behavior.
 </Tests>
+
+---
+
+<Verified>
+All synchronous fs operations have been replaced with their fs/promises equivalents (using fs.access for existence checks, fs.readFile, fs.writeFile, and fs.mkdir). Function signatures have been updated to async/await, and tests in `new.spec.ts` have been refactored to handle the async operations. All Vitest tests now pass successfully.
+</Verified>
