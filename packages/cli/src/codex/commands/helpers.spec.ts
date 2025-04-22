@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import fs from "fs";
+import * as fs from "fs/promises";
 import {
   createSanitizedFilename,
   generateTimestamp,
@@ -9,7 +9,7 @@ import {
 } from "./helpers";
 
 // Mock fs
-vi.mock("fs");
+vi.mock("fs/promises");
 
 describe("Helper Functions", () => {
   afterEach(() => {
@@ -44,47 +44,47 @@ describe("Helper Functions", () => {
   });
 
   describe("ensureDirectoryExists", () => {
-    it("should create directory if it doesn't exist", () => {
-      vi.mocked(fs.existsSync).mockReturnValue(false);
+    it("should create directory if it doesn't exist", async () => {
+      vi.mocked(fs.access).mockRejectedValue(new Error());
       
-      ensureDirectoryExists("./test-dir");
+      await ensureDirectoryExists("./test-dir");
       
-      expect(fs.existsSync).toHaveBeenCalledWith("./test-dir");
-      expect(fs.mkdirSync).toHaveBeenCalledWith("./test-dir", { recursive: true });
+      expect(fs.access).toHaveBeenCalledWith("./test-dir");
+      expect(fs.mkdir).toHaveBeenCalledWith("./test-dir", { recursive: true });
     });
 
-    it("should not create directory if it already exists", () => {
-      vi.mocked(fs.existsSync).mockReturnValue(true);
+    it("should not create directory if it already exists", async () => {
+      vi.mocked(fs.access).mockResolvedValue(undefined);
       
-      ensureDirectoryExists("./test-dir");
+      await ensureDirectoryExists("./test-dir");
       
-      expect(fs.existsSync).toHaveBeenCalledWith("./test-dir");
-      expect(fs.mkdirSync).not.toHaveBeenCalled();
+      expect(fs.access).toHaveBeenCalledWith("./test-dir");
+      expect(fs.mkdir).not.toHaveBeenCalled();
     });
   });
 
   describe("loadTemplate", () => {
     beforeEach(() => {
-      vi.mocked(fs.existsSync).mockReturnValue(true);
-      vi.mocked(fs.readFileSync).mockReturnValue("Hello {{name}}, ${title}!");
+      vi.mocked(fs.access).mockResolvedValue(undefined);
+      vi.mocked(fs.readFile).mockResolvedValue("Hello {{name}}, ${title}!");
     });
 
-    it("should load template and replace placeholders", () => {
-      const result = loadTemplate(
+    it("should load template and replace placeholders", async () => {
+      const result = await loadTemplate(
         "template.md",
         { name: "World", title: "Test" },
         "Default"
       );
       
       expect(result).toBe("Hello World, Test!");
-      expect(fs.existsSync).toHaveBeenCalledWith("template.md");
-      expect(fs.readFileSync).toHaveBeenCalledWith("template.md", "utf8");
+      expect(fs.access).toHaveBeenCalledWith("template.md");
+      expect(fs.readFile).toHaveBeenCalledWith("template.md", "utf8");
     });
 
-    it("should return default content if template doesn't exist", () => {
-      vi.mocked(fs.existsSync).mockReturnValue(false);
+    it("should return default content if template doesn't exist", async () => {
+      vi.mocked(fs.access).mockRejectedValue(new Error());
       
-      const result = loadTemplate(
+      const result = await loadTemplate(
         "non-existent.md",
         { name: "World" },
         "Default Content"
@@ -93,12 +93,11 @@ describe("Helper Functions", () => {
       expect(result).toBe("Default Content");
     });
 
-    it("should return default content if there's an error", () => {
-      vi.mocked(fs.readFileSync).mockImplementation(() => {
-        throw new Error("Read error");
-      });
+    it("should return default content if there's an error", async () => {
+      vi.mocked(fs.access).mockResolvedValue(undefined);
+      vi.mocked(fs.readFile).mockRejectedValue(new Error("Read error"));
       
-      const result = loadTemplate(
+      const result = await loadTemplate(
         "error.md",
         { name: "World" },
         "Default Content"
@@ -109,19 +108,19 @@ describe("Helper Functions", () => {
   });
 
   describe("createFile", () => {
-    it("should create a file with the given content", () => {
-      const result = createFile("test.md", "Test content");
+    it("should create a file with the given content", async () => {
+      vi.mocked(fs.writeFile).mockResolvedValue(undefined);
+      
+      const result = await createFile("test.md", "Test content");
       
       expect(result).toBe("test.md");
-      expect(fs.writeFileSync).toHaveBeenCalledWith("test.md", "Test content");
+      expect(fs.writeFile).toHaveBeenCalledWith("test.md", "Test content");
     });
 
-    it("should throw an error if file creation fails", () => {
-      vi.mocked(fs.writeFileSync).mockImplementation(() => {
-        throw new Error("Write error");
-      });
+    it("should throw an error if file creation fails", async () => {
+      vi.mocked(fs.writeFile).mockRejectedValue(new Error("Write error"));
       
-      expect(() => createFile("error.md", "Content")).toThrow(
+      await expect(createFile("error.md", "Content")).rejects.toThrow(
         "Error creating file error.md: Error: Write error"
       );
     });

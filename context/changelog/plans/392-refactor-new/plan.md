@@ -7,7 +7,6 @@ Refactor the new command implementation to improve code quality, maintainability
 
 <Queued>
 ### Queued
-* Switch to async FS APIs #0002
 * Improve error handling #0003
 * Externalize configuration into constants or config object #0004
 * Enhance testability by decoupling file system operations #0005
@@ -16,7 +15,7 @@ Refactor the new command implementation to improve code quality, maintainability
 
 <Dequeued>
 ### Dequeued
-N/A
+* Switch to async FS APIs #0002
 </Dequeued>
 
 <Verified>

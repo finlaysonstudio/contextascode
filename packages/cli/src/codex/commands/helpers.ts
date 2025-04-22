@@ -1,5 +1,4 @@
-import fs from "fs";
-import path from "path";
+import * as fs from "fs/promises";
 
 /**
  * Creates a sanitized filename from a description
@@ -35,9 +34,11 @@ export function generateTimestamp(): string {
  * Ensures a directory exists, creating it if necessary
  * @param dirPath Path to the directory
  */
-export function ensureDirectoryExists(dirPath: string): void {
-  if (!fs.existsSync(dirPath)) {
-    fs.mkdirSync(dirPath, { recursive: true });
+export async function ensureDirectoryExists(dirPath: string): Promise<void> {
+  try {
+    await fs.access(dirPath);
+  } catch {
+    await fs.mkdir(dirPath, { recursive: true });
   }
 }
 
@@ -48,30 +49,27 @@ export function ensureDirectoryExists(dirPath: string): void {
  * @param defaultContent Default content if template doesn't exist
  * @returns Processed template content
  */
-export function loadTemplate(
+export async function loadTemplate(
   templatePath: string,
   replacements: Record<string, string>,
   defaultContent: string
-): string {
+): Promise<string> {
   try {
-    if (fs.existsSync(templatePath)) {
-      let content = fs.readFileSync(templatePath, "utf8");
-      
-      // Replace all placeholders in the template
-      Object.entries(replacements).forEach(([key, value]) => {
-        // Support both {{key}} and ${key} formats
-        content = content
-          .replace(new RegExp(`\\{\\{\\s*${key}\\s*\\}\\}`, "g"), value)
-          .replace(new RegExp(`\\$\\{${key}\\}`, "g"), value);
-      });
-      
-      return content;
-    }
-  } catch (error) {
-    // Fall back to default content if there's an error
+    await fs.access(templatePath);
+    let content = await fs.readFile(templatePath, "utf8");
+    
+    // Replace all placeholders in the template
+    Object.entries(replacements).forEach(([key, value]) => {
+      // Support both {{key}} and ${key} formats
+      content = content
+        .replace(new RegExp(`\\{\\{\\s*${key}\\s*\\}\\}`, "g"), value)
+        .replace(new RegExp(`\\$\\{${key}\\}`, "g"), value);
+    });
+    
+    return content;
+  } catch {
+    return defaultContent;
   }
-  
-  return defaultContent;
 }
 
 /**
@@ -80,9 +78,9 @@ export function loadTemplate(
  * @param content Content to write to the file
  * @returns The path to the created file
  */
-export function createFile(filePath: string, content: string): string {
+export async function createFile(filePath: string, content: string): Promise<string> {
   try {
-    fs.writeFileSync(filePath, content);
+    await fs.writeFile(filePath, content);
     return filePath;
   } catch (error) {
     throw new Error(`Error creating file ${filePath}: ${error}`);

@@ -13,7 +13,7 @@ export default defineConfig({
       fileName: (format, entryName) => `${entryName}.js`,
     },
     rollupOptions: {
-      external: ["@inquirer/prompts", "commander", "fs", "path"],
+      external: ["@inquirer/prompts", "commander", "fs/promises", "path"],
     },
   },
 });
