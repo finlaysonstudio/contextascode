@@ -7,4 +7,3 @@ npm run build
 npm run format
 npm run test
 npm run typecheck
-ls ./context/changelog/plans/*/02_processing
