@@ -21,19 +21,23 @@ describe("handleNewCommand", () => {
 
     // Mock helper functions
     vi.mocked(helpers.createSanitizedFilename).mockImplementation((desc) =>
-      desc.replace(/[^a-zA-Z0-9\s-]/g, "").replace(/\s+/g, "_")
+      desc.replace(/[^a-zA-Z0-9\s-]/g, "").replace(/\s+/g, "_"),
     );
     vi.mocked(helpers.generateTimestamp).mockReturnValue("20230101_003045_678");
-    vi.mocked(helpers.ensureDirectoryExists).mockImplementation(() => undefined);
-    vi.mocked(helpers.loadTemplate).mockImplementation((path, replacements, defaultContent) => {
-      if (path.includes("changelog")) {
-        return `# ${replacements.message}\n\nTemplate content`;
-      } else if (path.includes("prompt")) {
-        return `# ${replacements.title}\n\nPrompt template`;
-      }
-      return defaultContent;
-    });
-    vi.mocked(helpers.createFile).mockImplementation((path) => {
+    vi.mocked(helpers.ensureDirectoryExists).mockImplementation(() =>
+      Promise.resolve(),
+    );
+    vi.mocked(helpers.loadTemplate).mockImplementation(
+      async (path, replacements, defaultContent) => {
+        if (path.includes("changelog")) {
+          return `# ${replacements.message}\n\nTemplate content`;
+        } else if (path.includes("prompt")) {
+          return `# ${replacements.title}\n\nPrompt template`;
+        }
+        return defaultContent;
+      },
+    );
+    vi.mocked(helpers.createFile).mockImplementation(async (path) => {
       return path;
     });
 
@@ -99,7 +103,9 @@ describe("handleNewCommand", () => {
     });
 
     it("should use default template if template file doesn't exist", async () => {
-      vi.mocked(helpers.loadTemplate).mockReturnValueOnce("# no template\n\n");
+      vi.mocked(helpers.loadTemplate).mockResolvedValueOnce(
+        "# no template\n\n",
+      );
 
       await handleNewCommand("change", "no template");
 
@@ -143,7 +149,9 @@ describe("handleNewCommand", () => {
     });
 
     it("should use default template if template file doesn't exist", async () => {
-      vi.mocked(helpers.loadTemplate).mockReturnValueOnce("# no template\n\n");
+      vi.mocked(helpers.loadTemplate).mockResolvedValueOnce(
+        "# no template\n\n",
+      );
 
       await handleNewCommand("prompt", "no template");
 

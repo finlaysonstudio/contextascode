@@ -41,7 +41,7 @@ export async function handleNewCommand(
 
   // Create sanitized filename from description
   const sanitizedDescription = createSanitizedFilename(finalDescription);
-  
+
   try {
     if (type === "change") {
       await handleChangeFile(sanitizedDescription, finalDescription);
@@ -59,29 +59,29 @@ export async function handleNewCommand(
  */
 async function handleChangeFile(
   sanitizedDescription: string,
-  finalDescription: string
+  finalDescription: string,
 ): Promise<void> {
   const timestamp = generateTimestamp();
   const filename = `${timestamp}_${sanitizedDescription}.md`;
   const changelogDir = "./context/changelog";
   const filePath = path.join(changelogDir, filename);
   const templatePath = "./context/prompts/contextascode/templates/changelog.md";
-  
+
   // Default content if template doesn't exist
   const defaultContent = `# ${finalDescription}\n\n`;
-  
+
   // Load template with replacements
-  const content = loadTemplate(
+  const content = await loadTemplate(
     templatePath,
     { message: finalDescription },
-    defaultContent
+    defaultContent,
   );
-  
+
   // Ensure directory exists
-  ensureDirectoryExists(changelogDir);
-  
+  await ensureDirectoryExists(changelogDir);
+
   // Create the file
-  createFile(filePath, content);
+  await createFile(filePath, content);
   console.log(`Created changelog file: ${filePath}`);
 }
 
@@ -90,28 +90,28 @@ async function handleChangeFile(
  */
 async function handlePromptFile(
   sanitizedDescription: string,
-  finalDescription: string
+  finalDescription: string,
 ): Promise<void> {
   const filename = `${sanitizedDescription}.md`;
   const promptsDir = "./context/prompts";
   const filePath = path.join(promptsDir, filename);
   const templatePath = "./context/prompts/contextascode/templates/prompt.md";
-  
+
   // Default content if template doesn't exist
   const defaultContent = `# ${finalDescription}\n\n`;
-  
+
   // Load template with replacements
-  const content = loadTemplate(
+  const content = await loadTemplate(
     templatePath,
     { title: finalDescription },
-    defaultContent
+    defaultContent,
   );
-  
+
   // Ensure directory exists
-  ensureDirectoryExists(promptsDir);
-  
+  await ensureDirectoryExists(promptsDir);
+
   // Create the file
-  createFile(filePath, content);
+  await createFile(filePath, content);
   console.log(`Created prompt file: ${filePath}`);
 }
 
