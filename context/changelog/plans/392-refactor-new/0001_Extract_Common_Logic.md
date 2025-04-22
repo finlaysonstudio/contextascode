@@ -50,3 +50,9 @@ Successfully extracted common logic into helper functions:
 
 All existing tests continue to pass with the new implementation. The code is now more maintainable and has less duplication. The helper functions are properly exported and can be reused in other parts of the codebase.
 </Results>
+
+---
+
+<Verified>
+All tests for helper functions (`createSanitizedFilename`, `generateTimestamp`, `ensureDirectoryExists`, `loadTemplate`, `createFile`) and new command handlers (`handleChangeFile`, `handlePromptFile`) passed successfully. The common logic extraction works as expected, and existing tests continue to pass.
+</Verified>

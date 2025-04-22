@@ -16,12 +16,12 @@ Refactor the new command implementation to improve code quality, maintainability
 
 <Dequeued>
 ### Dequeued
-* Extract common logic into helper functions #0001
+N/A
 </Dequeued>
 
 <Verified>
 ### Verified
-N/A
+* Extract common logic into helper functions #0001
 </Verified>
 
 ## 💻 Development Priorities
