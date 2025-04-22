@@ -9,29 +9,7 @@ vi.mock("fs");
 vi.mock("@inquirer/prompts", () => ({
   input: vi.fn(),
 }));
-vi.mock("./helpers", async () => {
-  const actual = await vi.importActual("./helpers");
-  return {
-    ...actual,
-    createSanitizedFilename: vi.fn((desc) => 
-      desc.replace(/[^a-zA-Z0-9\s-]/g, "").replace(/\s+/g, "_")),
-    generateTimestamp: vi.fn(() => "20230101_003045_678"),
-    ensureDirectoryExists: vi.fn(),
-    loadTemplate: vi.fn((path, replacements, defaultContent) => {
-      if (path.includes("changelog")) {
-        return `# ${replacements.message}\n\nTemplate content`;
-      } else if (path.includes("prompt")) {
-        return `# ${replacements.title}\n\nPrompt template`;
-      }
-      return defaultContent;
-    }),
-    createFile: vi.fn((path) => {
-      // Mock fs.writeFileSync to make the tests pass
-      vi.mocked(fs.writeFileSync).mockImplementation(() => undefined);
-      return path;
-    }),
-  };
-});
+vi.mock("./helpers");
 
 describe("handleNewCommand", () => {
   const mockDate = new Date("2023-01-01T00:30:45.678Z");
@@ -40,6 +18,24 @@ describe("handleNewCommand", () => {
     // Mock Date
     vi.useFakeTimers();
     vi.setSystemTime(mockDate);
+
+    // Mock helper functions
+    vi.mocked(helpers.createSanitizedFilename).mockImplementation((desc) =>
+      desc.replace(/[^a-zA-Z0-9\s-]/g, "").replace(/\s+/g, "_")
+    );
+    vi.mocked(helpers.generateTimestamp).mockReturnValue("20230101_003045_678");
+    vi.mocked(helpers.ensureDirectoryExists).mockImplementation(() => undefined);
+    vi.mocked(helpers.loadTemplate).mockImplementation((path, replacements, defaultContent) => {
+      if (path.includes("changelog")) {
+        return `# ${replacements.message}\n\nTemplate content`;
+      } else if (path.includes("prompt")) {
+        return `# ${replacements.title}\n\nPrompt template`;
+      }
+      return defaultContent;
+    });
+    vi.mocked(helpers.createFile).mockImplementation((path) => {
+      return path;
+    });
 
     // Mock fs functions
     vi.mocked(fs.existsSync).mockImplementation((path) => {
@@ -50,16 +46,6 @@ describe("handleNewCommand", () => {
         return true;
       }
       return false;
-    });
-
-    vi.mocked(fs.readFileSync).mockImplementation((path) => {
-      if (path === "./context/prompts/contextascode/templates/changelog.md") {
-        return "# {{ message }}\n\nTemplate content";
-      }
-      if (path === "./context/prompts/contextascode/templates/prompt.md") {
-        return "# ${title}\n\nPrompt template";
-      }
-      return "";
     });
     vi.mocked(fs.writeFileSync).mockImplementation(() => undefined);
     vi.mocked(fs.mkdirSync).mockImplementation(() => undefined);
@@ -77,7 +63,7 @@ describe("handleNewCommand", () => {
     it("should create a change file with provided description", async () => {
       await handleNewCommand("change", "test description");
 
-      expect(fs.writeFileSync).toHaveBeenCalledWith(
+      expect(helpers.createFile).toHaveBeenCalledWith(
         expect.stringMatching(
           /context\/changelog\/\d{8}_\d{6}_\d{3}_test_description\.md$/,
         ),
@@ -90,7 +76,7 @@ describe("handleNewCommand", () => {
 
       expect(inquirerPrompts.input).toHaveBeenCalled();
 
-      expect(fs.writeFileSync).toHaveBeenCalledWith(
+      expect(helpers.createFile).toHaveBeenCalledWith(
         expect.stringMatching(
           /context\/changelog\/\d{8}_\d{6}_\d{3}_prompted_description\.md$/,
         ),
@@ -99,9 +85,12 @@ describe("handleNewCommand", () => {
     });
 
     it("should sanitize description for filename", async () => {
-      await handleNewCommand("change", "test description with @special# chars!");
+      await handleNewCommand(
+        "change",
+        "test description with @special# chars!",
+      );
 
-      expect(fs.writeFileSync).toHaveBeenCalledWith(
+      expect(helpers.createFile).toHaveBeenCalledWith(
         expect.stringMatching(
           /context\/changelog\/\d{8}_\d{6}_\d{3}_test_description_with_special_chars\.md$/,
         ),
@@ -110,13 +99,11 @@ describe("handleNewCommand", () => {
     });
 
     it("should use default template if template file doesn't exist", async () => {
-      vi.mocked(fs.existsSync).mockImplementation((path) => {
-        return false;
-      });
+      vi.mocked(helpers.loadTemplate).mockReturnValueOnce("# no template\n\n");
 
       await handleNewCommand("change", "no template");
 
-      expect(fs.writeFileSync).toHaveBeenCalledWith(
+      expect(helpers.createFile).toHaveBeenCalledWith(
         expect.stringMatching(
           /context\/changelog\/\d{8}_\d{6}_\d{3}_no_template\.md$/,
         ),
@@ -129,7 +116,7 @@ describe("handleNewCommand", () => {
     it("should create a prompt file with provided description", async () => {
       await handleNewCommand("prompt", "test prompt");
 
-      expect(fs.writeFileSync).toHaveBeenCalledWith(
+      expect(helpers.createFile).toHaveBeenCalledWith(
         "context/prompts/test_prompt.md",
         "# test prompt\n\nPrompt template",
       );
@@ -140,7 +127,7 @@ describe("handleNewCommand", () => {
 
       expect(inquirerPrompts.input).toHaveBeenCalled();
 
-      expect(fs.writeFileSync).toHaveBeenCalledWith(
+      expect(helpers.createFile).toHaveBeenCalledWith(
         "context/prompts/prompted_description.md",
         "# prompted description\n\nPrompt template",
       );
@@ -149,20 +136,18 @@ describe("handleNewCommand", () => {
     it("should sanitize description for filename", async () => {
       await handleNewCommand("prompt", "test prompt with @special# chars!");
 
-      expect(fs.writeFileSync).toHaveBeenCalledWith(
+      expect(helpers.createFile).toHaveBeenCalledWith(
         "context/prompts/test_prompt_with_special_chars.md",
         "# test prompt with @special# chars!\n\nPrompt template",
       );
     });
 
     it("should use default template if template file doesn't exist", async () => {
-      vi.mocked(fs.existsSync).mockImplementation((path) => {
-        return false;
-      });
+      vi.mocked(helpers.loadTemplate).mockReturnValueOnce("# no template\n\n");
 
       await handleNewCommand("prompt", "no template");
 
-      expect(fs.writeFileSync).toHaveBeenCalledWith(
+      expect(helpers.createFile).toHaveBeenCalledWith(
         "context/prompts/no_template.md",
         "# no template\n\n",
       );
