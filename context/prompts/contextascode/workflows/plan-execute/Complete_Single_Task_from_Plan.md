@@ -31,6 +31,8 @@ Read and understand the `<Description>` and `<Details>` of the task.
 
 Apply the change described using tools or commands.
 
+Add any new files created to the plan `<Files>` block if available
+
 ### 3. Test and Record Results
 
 Run the `<Tests>` provided in the task file.

@@ -43,6 +43,8 @@ N/A
   <Files>
     - packages/cli/src/codex/commands/new.ts
     - packages/cli/src/codex/commands/new.spec.ts
+    - packages/cli/src/codex/commands/helpers.ts
+    - packages/cli/src/codex/commands/helpers.spec.ts
   </Files>
   <Directories>
     - packages/cli/src/utils
