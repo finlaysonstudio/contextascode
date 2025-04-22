@@ -1,7 +1,7 @@
 ---
 id: ${id}
 plan: ./context/changelog/plans/${id}/plan.md
-thinking: full
+thinking: fast
 ---
 # Change Request List from Plan 🗒️
 

@@ -2,17 +2,14 @@
 
 ## 📥 Expected Input Context
 
-```xml
-<Plan></Plan>
-<Task></Task>
+```yaml
+plan: context/changelog/plans/${plan}/plan.md
 ```
-
-<Plan>context/changelog/plans/${plan}/plan.md</Plan>
-<Task>context/changelog/plans/${plan}/03_complete/${task}.md</Task>
 
 ## 📤 Expected Output Artifacts
 
 * Append verification block to task (see sample)
+* Move task from `<Dequeued>` to `<Verified>` 
 
 ## ☑ Process
 
@@ -21,35 +18,9 @@
 3. Confirm expected results are reported in results
 4. Independently reproduce the tests and re-run them
 5. Report the results in the verification block
-6. Report any concerns from previous steps in the optional concerns statement
+6. Move task from `<Dequeued>` to `<Verified>` in lifecycle board in plan.md
 
-### Cleanup
-
-* If the task is complete but was left in the Processing section, move it to Complete
-* Make sure the task is in the 03_complete directory
-* Delete any copies of the task in 02_processing
-* run `npm install`
-
-### STOP ⏹️
-
-Exit once the verification process is complete.
-
-<Forbidden>
 Do not execute a new task.
-</Forbidden>
-
-## 📝 Guidance
-
-### Example "Concerns"
-
-Report anything likely to cause problems or confusion.
-
-* Task file not coherent
-* No proposed test in task
-* Proposed test does not fully exercise the change
-* Described results include errors
-* Describe results do not reflect test cases
-* Do NOT output "no concerns" or alike; skip statement if there are no concerns
 
 ## 📎 Resources
 
@@ -65,12 +36,20 @@ ${output}
 </Verified>
 ```
 
-### Sample Concern Statement
+### Sample plan.md Update
 
-Appended to the end of the verification block.
+Move task from one tag block to another:
 
-```markdown
-<Concerns>
-${output}
-</Concerns>
+```diff
+<Dequeued>
+### Dequeued
+- * Setup GitHub Actions
++ N/A
+</Dequeued>
+
+<Verified>
+### Verified
+* Create test harness
++ * Setup GitHub Actions
+</Verified>
 ```

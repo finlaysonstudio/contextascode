@@ -27,6 +27,8 @@ Carry over any important commands, configurations, and steps from source documen
 Task files may include additional details.
 Consider what would make this task more clear to a less-capable developer given the context of this change.
 
+List any implementations files that will have to be edited or created in the `<Files>` tag block.
+
 Task files should include a test to verify the task was complete.
 Tests can be as simple as making sure a directory exists or a new string is found in a file.
 
@@ -65,6 +67,11 @@ Omit unused sections.
 <Details>
 {details}
 </Details>
+
+<Files>
+- {file}
+- …
+</Files>
 
 <Tests>
 {tests}
