@@ -7,12 +7,11 @@ Refactor the new command implementation to improve code quality, maintainability
 
 <Queued>
 ### Queued
-* Move slug generation function to separate utilities directory #0006
 </Queued>
 
 <Dequeued>
 ### Dequeued
-N/A
+* Move slug generation function to separate utilities directory #0006
 </Dequeued>
 
 <Verified>

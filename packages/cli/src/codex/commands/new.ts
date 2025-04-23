@@ -4,12 +4,12 @@ import { input } from "@inquirer/prompts";
 import path from "path";
 import { ValidationError, UserCancellationError } from "../../utils/errors";
 import {
-  createSanitizedFilename,
   generateTimestamp,
   ensureDirectoryExists,
   loadTemplate,
   createFile,
 } from "./helpers";
+import { createSanitizedFilename } from "../../utils/string";
 import { CONFIG } from "../config";
 
 export type NewCommandType = "change" | "prompt";

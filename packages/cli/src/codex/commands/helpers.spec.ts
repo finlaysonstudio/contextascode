@@ -2,12 +2,12 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import * as fs from "fs/promises";
 import { FileSystemError } from "../../utils/errors";
 import {
-  createSanitizedFilename,
   generateTimestamp,
   ensureDirectoryExists,
   loadTemplate,
   createFile,
 } from "./helpers";
+import { createSanitizedFilename } from "../../utils/string";
 
 // Mock fs
 vi.mock("fs/promises");

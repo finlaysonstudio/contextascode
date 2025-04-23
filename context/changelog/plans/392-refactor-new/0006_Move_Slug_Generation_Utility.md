@@ -49,3 +49,17 @@ This will improve code organization and make the slug generation logic reusable 
 3. Check that the slug generation logic is consistent across the application.
 4. Ensure the utility can be imported and used in other parts of the codebase.
 </Tests>
+
+---
+
+<Results>
+Successfully moved the `createSanitizedFilename` function from `helpers.ts` to a new `string.ts` utility file.
+
+Changes made:
+1. Created new file `packages/cli/src/utils/string.ts` with the function
+2. Removed the function from `helpers.ts`
+3. Updated imports in `helpers.ts` and `new.ts`
+4. Created a new test file `packages/cli/src/utils/string.spec.ts` with comprehensive tests
+
+All existing functionality should be preserved with improved code organization. The function was renamed from the proposed `generateSlug` to maintain the existing `createSanitizedFilename` name for consistency with current code.
+</Results>

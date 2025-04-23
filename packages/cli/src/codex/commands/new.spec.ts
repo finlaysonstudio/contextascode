@@ -3,6 +3,7 @@ import fs from "fs";
 import { handleNewCommand, NewCommandType } from "./new";
 import * as inquirerPrompts from "@inquirer/prompts";
 import * as helpers from "./helpers";
+import * as stringUtils from "../../utils/string";
 import { ValidationError, UserCancellationError } from "../../utils/errors";
 import { CONFIG } from "../config";
 
@@ -12,6 +13,7 @@ vi.mock("@inquirer/prompts", () => ({
   input: vi.fn(),
 }));
 vi.mock("./helpers");
+vi.mock("../../utils/string");
 
 describe("handleNewCommand", () => {
   const mockDate = new Date("2023-01-01T00:30:45.678Z");
@@ -22,7 +24,7 @@ describe("handleNewCommand", () => {
     vi.setSystemTime(mockDate);
 
     // Mock helper functions
-    vi.mocked(helpers.createSanitizedFilename).mockImplementation((desc) =>
+    vi.mocked(stringUtils.createSanitizedFilename).mockImplementation((desc) =>
       desc.replace(/[^a-zA-Z0-9\s-]/g, "").replace(/\s+/g, "_"),
     );
     vi.mocked(helpers.generateTimestamp).mockReturnValue("20230101_003045_678");
