@@ -17,6 +17,10 @@ Context as Code considers change requests, conventions, prompt libraries, and to
 * ./packages/ - Workspaces
 * ./package.json - NPM monorepo management layer
 
+## 📦 Packages
+
+* ./packages/cli - the `codex` cli
+
 ## 🗣️ Prompts and Context
 
 * ./context/changelog/*.md - change requests
