@@ -32,3 +32,31 @@ This will make the code more reusable as a library and provide better feedback t
 3. Confirm that the CLI still exits with non-zero status codes on errors.
 4. Check that error messages are user-friendly and actionable.
 </Tests>
+
+---
+
+<Results>
+Implemented improved error handling with the following changes:
+
+1. Created custom error classes:
+   - Added `CliError` as a base class
+   - Added `ValidationError` for input validation failures
+   - Added `FileSystemError` for file system operation failures
+   - Added `UserCancellationError` for user cancellations
+
+2. Replaced direct process.exit() calls:
+   - Modified `handleNewCommand` to throw errors instead of calling process.exit()
+   - Added proper error handling in helper functions
+
+3. Added more context to error messages:
+   - FileSystemError now includes file paths in error messages
+   - Added original error information when catching and rethrowing
+
+4. Implemented centralized error handling:
+   - Added `handleCliError` function in index.ts
+   - Updated command handlers to use the centralized error handler
+   - Added appropriate exit codes based on error types
+   - Added conditional stack trace display based on environment
+
+The code is now more reusable as a library and provides better feedback to users when errors occur.
+</Results>

@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import * as fs from "fs/promises";
+import { FileSystemError } from "../../utils/errors";
 import {
   createSanitizedFilename,
   generateTimestamp,
@@ -46,18 +47,18 @@ describe("Helper Functions", () => {
   describe("ensureDirectoryExists", () => {
     it("should create directory if it doesn't exist", async () => {
       vi.mocked(fs.access).mockRejectedValue(new Error());
-      
+
       await ensureDirectoryExists("./test-dir");
-      
+
       expect(fs.access).toHaveBeenCalledWith("./test-dir");
       expect(fs.mkdir).toHaveBeenCalledWith("./test-dir", { recursive: true });
     });
 
     it("should not create directory if it already exists", async () => {
       vi.mocked(fs.access).mockResolvedValue(undefined);
-      
+
       await ensureDirectoryExists("./test-dir");
-      
+
       expect(fs.access).toHaveBeenCalledWith("./test-dir");
       expect(fs.mkdir).not.toHaveBeenCalled();
     });
@@ -73,9 +74,9 @@ describe("Helper Functions", () => {
       const result = await loadTemplate(
         "template.md",
         { name: "World", title: "Test" },
-        "Default"
+        "Default",
       );
-      
+
       expect(result).toBe("Hello World, Test!");
       expect(fs.access).toHaveBeenCalledWith("template.md");
       expect(fs.readFile).toHaveBeenCalledWith("template.md", "utf8");
@@ -83,26 +84,26 @@ describe("Helper Functions", () => {
 
     it("should return default content if template doesn't exist", async () => {
       vi.mocked(fs.access).mockRejectedValue(new Error());
-      
+
       const result = await loadTemplate(
         "non-existent.md",
         { name: "World" },
-        "Default Content"
+        "Default Content",
       );
-      
+
       expect(result).toBe("Default Content");
     });
 
     it("should return default content if there's an error", async () => {
       vi.mocked(fs.access).mockResolvedValue(undefined);
       vi.mocked(fs.readFile).mockRejectedValue(new Error("Read error"));
-      
+
       const result = await loadTemplate(
         "error.md",
         { name: "World" },
-        "Default Content"
+        "Default Content",
       );
-      
+
       expect(result).toBe("Default Content");
     });
   });
@@ -110,18 +111,21 @@ describe("Helper Functions", () => {
   describe("createFile", () => {
     it("should create a file with the given content", async () => {
       vi.mocked(fs.writeFile).mockResolvedValue(undefined);
-      
+
       const result = await createFile("test.md", "Test content");
-      
+
       expect(result).toBe("test.md");
       expect(fs.writeFile).toHaveBeenCalledWith("test.md", "Test content");
     });
 
     it("should throw an error if file creation fails", async () => {
       vi.mocked(fs.writeFile).mockRejectedValue(new Error("Write error"));
-      
+
       await expect(createFile("error.md", "Content")).rejects.toThrow(
-        "Error creating file error.md: Error: Write error"
+        FileSystemError,
+      );
+      await expect(createFile("error.md", "Content")).rejects.toThrow(
+        "Error creating file: Write error (path: error.md)",
       );
     });
   });

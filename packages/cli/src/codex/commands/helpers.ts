@@ -1,4 +1,5 @@
 import * as fs from "fs/promises";
+import { FileSystemError } from "../../utils/errors";
 
 /**
  * Creates a sanitized filename from a description
@@ -37,8 +38,16 @@ export function generateTimestamp(): string {
 export async function ensureDirectoryExists(dirPath: string): Promise<void> {
   try {
     await fs.access(dirPath);
-  } catch {
-    await fs.mkdir(dirPath, { recursive: true });
+  } catch (error) {
+    try {
+      await fs.mkdir(dirPath, { recursive: true });
+    } catch (mkdirError) {
+      throw new FileSystemError(
+        `Failed to create directory: ${mkdirError instanceof Error ? mkdirError.message : String(mkdirError)}`,
+        dirPath,
+        mkdirError instanceof Error ? mkdirError : undefined,
+      );
+    }
   }
 }
 
@@ -52,22 +61,31 @@ export async function ensureDirectoryExists(dirPath: string): Promise<void> {
 export async function loadTemplate(
   templatePath: string,
   replacements: Record<string, string>,
-  defaultContent: string
+  defaultContent: string,
 ): Promise<string> {
   try {
     await fs.access(templatePath);
-    let content = await fs.readFile(templatePath, "utf8");
-    
-    // Replace all placeholders in the template
-    Object.entries(replacements).forEach(([key, value]) => {
-      // Support both {{key}} and ${key} formats
-      content = content
-        .replace(new RegExp(`\\{\\{\\s*${key}\\s*\\}\\}`, "g"), value)
-        .replace(new RegExp(`\\$\\{${key}\\}`, "g"), value);
-    });
-    
-    return content;
+    try {
+      let content = await fs.readFile(templatePath, "utf8");
+
+      // Replace all placeholders in the template
+      Object.entries(replacements).forEach(([key, value]) => {
+        // Support both {{key}} and ${key} formats
+        content = content
+          .replace(new RegExp(`\\{\\{\\s*${key}\\s*\\}\\}`, "g"), value)
+          .replace(new RegExp(`\\$\\{${key}\\}`, "g"), value);
+      });
+
+      return content;
+    } catch (readError) {
+      throw new FileSystemError(
+        `Failed to read template file: ${readError instanceof Error ? readError.message : String(readError)}`,
+        templatePath,
+        readError instanceof Error ? readError : undefined,
+      );
+    }
   } catch {
+    // Template doesn't exist, return default content
     return defaultContent;
   }
 }
@@ -78,11 +96,18 @@ export async function loadTemplate(
  * @param content Content to write to the file
  * @returns The path to the created file
  */
-export async function createFile(filePath: string, content: string): Promise<string> {
+export async function createFile(
+  filePath: string,
+  content: string,
+): Promise<string> {
   try {
     await fs.writeFile(filePath, content);
     return filePath;
   } catch (error) {
-    throw new Error(`Error creating file ${filePath}: ${error}`);
+    throw new FileSystemError(
+      `Error creating file: ${error instanceof Error ? error.message : String(error)}`,
+      filePath,
+      error instanceof Error ? error : undefined,
+    );
   }
 }

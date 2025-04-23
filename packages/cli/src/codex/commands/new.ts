@@ -2,6 +2,7 @@
 import { Command } from "commander";
 import { input } from "@inquirer/prompts";
 import path from "path";
+import { ValidationError, UserCancellationError } from "../../utils/errors";
 import {
   createSanitizedFilename,
   generateTimestamp,
@@ -10,7 +11,7 @@ import {
   createFile,
 } from "./helpers";
 
-type NewCommandType = "change" | "prompt";
+export type NewCommandType = "change" | "prompt";
 
 export async function handleNewCommand(
   type: NewCommandType,
@@ -18,10 +19,9 @@ export async function handleNewCommand(
 ): Promise<void> {
   // Validate type
   if (type !== "change" && type !== "prompt") {
-    console.error(
-      `Error: Type must be 'change' or 'prompt', received '${type}'`,
+    throw new ValidationError(
+      `Type must be 'change' or 'prompt', received '${type}'`,
     );
-    process.exit(1);
   }
 
   // If description is not provided, prompt for it
@@ -34,23 +34,18 @@ export async function handleNewCommand(
           value.trim().length > 0 ? true : "Description cannot be empty",
       });
     } catch (error) {
-      console.error("Operation cancelled");
-      process.exit(1);
+      throw new UserCancellationError();
     }
   }
 
   // Create sanitized filename from description
   const sanitizedDescription = createSanitizedFilename(finalDescription);
 
-  try {
-    if (type === "change") {
-      await handleChangeFile(sanitizedDescription, finalDescription);
-    } else if (type === "prompt") {
-      await handlePromptFile(sanitizedDescription, finalDescription);
-    }
-  } catch (error) {
-    console.error(`Error creating ${type} file: ${error}`);
-    process.exit(1);
+  // Handle the appropriate file type
+  if (type === "change") {
+    await handleChangeFile(sanitizedDescription, finalDescription);
+  } else if (type === "prompt") {
+    await handlePromptFile(sanitizedDescription, finalDescription);
   }
 }
 
@@ -115,6 +110,8 @@ async function handlePromptFile(
   console.log(`Created prompt file: ${filePath}`);
 }
 
+import { handleCliError } from "../../index";
+
 export function newCommand(program: Command): void {
   program
     .command("new")
@@ -122,6 +119,10 @@ export function newCommand(program: Command): void {
     .argument("<type>", "Type of item to create (change or prompt)")
     .argument("[description]", "Description of the item")
     .action(async (type: NewCommandType, description?: string) => {
-      await handleNewCommand(type, description);
+      try {
+        await handleNewCommand(type, description);
+      } catch (error) {
+        handleCliError(error);
+      }
     });
 }

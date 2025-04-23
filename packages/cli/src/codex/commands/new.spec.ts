@@ -1,8 +1,9 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import fs from "fs";
-import { handleNewCommand } from "./new";
+import { handleNewCommand, NewCommandType } from "./new";
 import * as inquirerPrompts from "@inquirer/prompts";
 import * as helpers from "./helpers";
+import { ValidationError, UserCancellationError } from "../../utils/errors";
 
 // Mock dependencies
 vi.mock("fs");
@@ -61,6 +62,28 @@ describe("handleNewCommand", () => {
   afterEach(() => {
     vi.useRealTimers();
     vi.resetAllMocks();
+  });
+
+  it("should throw ValidationError for invalid type", async () => {
+    await expect(handleNewCommand("invalid" as NewCommandType)).rejects.toThrow(
+      ValidationError,
+    );
+    await expect(handleNewCommand("invalid" as NewCommandType)).rejects.toThrow(
+      "Type must be 'change' or 'prompt', received 'invalid'",
+    );
+  });
+
+  it("should throw UserCancellationError when user cancels prompt", async () => {
+    vi.mocked(inquirerPrompts.input).mockRejectedValue(
+      new Error("User cancelled"),
+    );
+
+    await expect(handleNewCommand("change")).rejects.toThrow(
+      UserCancellationError,
+    );
+    await expect(handleNewCommand("change")).rejects.toThrow(
+      "Operation cancelled by user",
+    );
   });
 
   describe("change command", () => {
