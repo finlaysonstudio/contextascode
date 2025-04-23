@@ -6,12 +6,11 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "codex": "dist/codex.js",
-    "contextaider": "dist/contextaider.js"
+    "codex": "dist/codex.js"
   },
   "scripts": {
     "build": "vite build && tsc --emitDeclarationOnly",
-    "postbuild": "chmod +x dist/codex.js dist/contextaider.js",
+    "postbuild": "chmod +x dist/codex.js",
     "clean": "rimraf dist",
     "test": "vitest run",
     "test:watch": "vitest",
