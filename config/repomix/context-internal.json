@@ -1,0 +1,18 @@
+{
+  "output": {
+    "filePath": "./context/out/repo/context-internal.xml",
+    "style": "xml",
+    "parsableStyle": true,
+    "directoryStructure": true
+  },
+  "include": [
+    "./context/internal/**"
+  ],
+  "ignore": {
+    "useGitignore": true,
+    "useDefaultPatterns": true
+  },
+  "security": {
+    "enableSecurityCheck": true
+  }
+}

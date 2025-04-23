@@ -1,0 +1,18 @@
+{
+  "output": {
+    "filePath": "./context/out/repo/packages-cli.xml",
+    "style": "xml",
+    "parsableStyle": true,
+    "directoryStructure": true
+  },
+  "include": [
+    "./packages/cli/**"
+  ],
+  "ignore": {
+    "useGitignore": true,
+    "useDefaultPatterns": true
+  },
+  "security": {
+    "enableSecurityCheck": true
+  }
+}

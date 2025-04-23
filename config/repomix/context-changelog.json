@@ -1,0 +1,21 @@
+{
+  "output": {
+    "filePath": "./context/out/repo/context-changelog.xml",
+    "style": "xml",
+    "parsableStyle": true,
+    "directoryStructure": true
+  },
+  "include": [
+    "./context/changelog/*"
+  ],
+  "ignore": {
+    "useGitignore": true,
+    "useDefaultPatterns": true,
+    "customPatterns": [
+      "./context/changelog/*/*"
+    ]
+  },
+  "security": {
+    "enableSecurityCheck": true
+  }
+}

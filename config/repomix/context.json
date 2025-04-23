@@ -1,0 +1,22 @@
+{
+  "output": {
+    "filePath": "./context/out/repo/context.xml",
+    "style": "xml",
+    "parsableStyle": true,
+    "directoryStructure": true
+  },
+  "include": [
+    "./context/**"
+  ],
+  "ignore": {
+    "useGitignore": true,
+    "useDefaultPatterns": true,
+    "customPatterns": [
+      "./context/changelog/**",
+      "./context/internal/**"
+    ]
+  },
+  "security": {
+    "enableSecurityCheck": true
+  }
+}

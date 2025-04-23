@@ -1,0 +1,29 @@
+{
+  "output": {
+    "filePath": "./context/out/repo/monorepo.xml",
+    "style": "xml",
+    "parsableStyle": true,
+    "directoryStructure": true
+  },
+  "include": [
+    "./**",
+    "./packages/*/package.json",
+    "./packages/*/readme.md"
+  ],
+  "ignore": {
+    "useGitignore": true,
+    "useDefaultPatterns": true,
+    "customPatterns": [
+      "./config/**",
+      "./context/*/**",
+      "./packages/*/*/**",
+      "./packages/**/tsconfig.json",
+      "./packages/**/vite.config.ts",
+      "./packages/**/vitest.config.ts",
+      "./packages/**/vitest.setup.ts"
+    ]
+  },
+  "security": {
+    "enableSecurityCheck": true
+  }
+}
