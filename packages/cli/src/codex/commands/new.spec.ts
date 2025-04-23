@@ -4,6 +4,7 @@ import { handleNewCommand, NewCommandType } from "./new";
 import * as inquirerPrompts from "@inquirer/prompts";
 import * as helpers from "./helpers";
 import { ValidationError, UserCancellationError } from "../../utils/errors";
+import { CONFIG } from "../config";
 
 // Mock dependencies
 vi.mock("fs");
@@ -44,10 +45,10 @@ describe("handleNewCommand", () => {
 
     // Mock fs functions
     vi.mocked(fs.existsSync).mockImplementation((path) => {
-      if (path === "./context/prompts/contextascode/templates/changelog.md") {
+      if (path === CONFIG.paths.templates.changelog) {
         return true;
       }
-      if (path === "./context/prompts/contextascode/templates/prompt.md") {
+      if (path === CONFIG.paths.templates.prompt) {
         return true;
       }
       return false;

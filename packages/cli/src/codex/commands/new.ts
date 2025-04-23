@@ -10,6 +10,7 @@ import {
   loadTemplate,
   createFile,
 } from "./helpers";
+import { CONFIG } from "../config";
 
 export type NewCommandType = "change" | "prompt";
 
@@ -58,9 +59,9 @@ async function handleChangeFile(
 ): Promise<void> {
   const timestamp = generateTimestamp();
   const filename = `${timestamp}_${sanitizedDescription}.md`;
-  const changelogDir = "./context/changelog";
+  const changelogDir = CONFIG.paths.changelogDir;
   const filePath = path.join(changelogDir, filename);
-  const templatePath = "./context/prompts/contextascode/templates/changelog.md";
+  const templatePath = CONFIG.paths.templates.changelog;
 
   // Default content if template doesn't exist
   const defaultContent = `# ${finalDescription}\n\n`;
@@ -88,9 +89,9 @@ async function handlePromptFile(
   finalDescription: string,
 ): Promise<void> {
   const filename = `${sanitizedDescription}.md`;
-  const promptsDir = "./context/prompts";
+  const promptsDir = CONFIG.paths.promptsDir;
   const filePath = path.join(promptsDir, filename);
-  const templatePath = "./context/prompts/contextascode/templates/prompt.md";
+  const templatePath = CONFIG.paths.templates.prompt;
 
   // Default content if template doesn't exist
   const defaultContent = `# ${finalDescription}\n\n`;

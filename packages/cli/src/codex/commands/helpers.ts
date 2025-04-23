@@ -1,5 +1,6 @@
 import * as fs from "fs/promises";
 import { FileSystemError } from "../../utils/errors";
+import { CONFIG } from "../config";
 
 /**
  * Creates a sanitized filename from a description
@@ -70,10 +71,35 @@ export async function loadTemplate(
 
       // Replace all placeholders in the template
       Object.entries(replacements).forEach(([key, value]) => {
-        // Support both {{key}} and ${key} formats
-        content = content
-          .replace(new RegExp(`\\{\\{\\s*${key}\\s*\\}\\}`, "g"), value)
-          .replace(new RegExp(`\\$\\{${key}\\}`, "g"), value);
+        // Determine which template type we're using
+        const isChangelogTemplate =
+          templatePath === CONFIG.paths.templates.changelog;
+        const isPromptTemplate = templatePath === CONFIG.paths.templates.prompt;
+
+        if (
+          isChangelogTemplate &&
+          key === "message" &&
+          CONFIG.patterns.templateVariables.changelog.message
+        ) {
+          content = content.replace(
+            CONFIG.patterns.templateVariables.changelog.message,
+            value,
+          );
+        } else if (
+          isPromptTemplate &&
+          key === "title" &&
+          CONFIG.patterns.templateVariables.prompt.title
+        ) {
+          content = content.replace(
+            CONFIG.patterns.templateVariables.prompt.title,
+            value,
+          );
+        } else {
+          // Fallback to generic replacement for other cases
+          content = content
+            .replace(new RegExp(`\\{\\{\\s*${key}\\s*\\}\\}`, "g"), value)
+            .replace(new RegExp(`\\$\\{${key}\\}`, "g"), value);
+        }
       });
 
       return content;

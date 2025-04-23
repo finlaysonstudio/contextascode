@@ -7,14 +7,13 @@ Refactor the new command implementation to improve code quality, maintainability
 
 <Queued>
 ### Queued
-* Externalize configuration into constants or config object #0004
 * Enhance testability by decoupling file system operations #0005
 * Move slug generation function to separate utilities directory #0006
 </Queued>
 
 <Dequeued>
 ### Dequeued
-N/A
+* Externalize configuration into constants or config object #0004
 </Dequeued>
 
 <Verified>
