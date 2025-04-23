@@ -30,7 +30,7 @@ export async function handleNewCommand(
   if (!finalDescription) {
     try {
       finalDescription = await input({
-        message: "Enter a description for the change:",
+        message: `Enter a description for the ${type}:`,
         validate: (value) =>
           value.trim().length > 0 ? true : "Description cannot be empty",
       });
