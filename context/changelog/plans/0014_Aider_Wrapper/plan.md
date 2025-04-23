@@ -7,14 +7,11 @@ A TypeScript-based CLI wrapper for the aider tool that preprocesses custom flags
 - `/packages/contextaider` - Main package directory
 - `/packages/contextaider/bin` - CLI entrypoint and executable scripts
 - `/packages/contextaider/src` - Core wrapper implementation and utilities
-- `/packages/contextaider/src/__tests__` - Unit test suites
 - `/packages/contextaider/tests` - Integration test suites
 - `/packages/contextaider/package.json` - ESM build config and global bin entry
 - `/packages/contextaider/tsconfig.json` - TypeScript configuration
 - `/packages/contextaider/vite.config.ts` - Vite build configuration
 - `/packages/contextaider/vitest.config.ts` - Vitest test configuration
-- `/packages/contextaider/.eslintrc.js` - ESLint configuration
-- `/packages/contextaider/.prettierrc` - Prettier configuration
 
 ## Architecture
 - `packages/contextaider/bin/contextaider.ts` - CLI entrypoint using Commander
@@ -73,31 +70,36 @@ A TypeScript-based CLI wrapper for the aider tool that preprocesses custom flags
 {
   "name": "contextaider",
   "version": "0.0.1",
+  "description": "CLI wrapper for the aider tool with enhanced file handling",
   "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "bin": {
-    "contextaider": "./bin/contextaider.js"
+    "contextaider": "./dist/contextaider.js"
   },
   "scripts": {
     "build": "vite build && tsc --emitDeclarationOnly",
+    "postbuild": "chmod +x dist/contextaider.js",
     "clean": "rimraf dist",
-    "format": "eslint --fix",
-    "format:package": "sort-package-json",
-    "lint": "eslint .",
     "test": "vitest run",
     "test:watch": "vitest watch",
     "typecheck": "tsc --noEmit"
   },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "cli",
+    "aider",
+    "ai",
+    "coding",
+    "assistant"
+  ],
   "dependencies": {
-    "commander": "^11.0.0"
+    "commander": "^13.1.0"
   },
   "devDependencies": {
-    "@jaypie/eslint": "latest",
-    "@jaypie/testkit": "latest",
     "@types/node": "^20.0.0",
-    "eslint": "latest",
-    "rimraf": "latest",
-    "sort-package-json": "latest",
-    "tsx": "latest",
     "typescript": "^5.0.0",
     "vite": "^5.0.0",
     "vitest": "latest"
@@ -130,19 +132,6 @@ A TypeScript-based CLI wrapper for the aider tool that preprocesses custom flags
 }
 ```
 
-### ESLint Configuration
-```javascript
-module.exports = {
-  extends: ['@jaypie/eslint'],
-  parserOptions: {
-    project: './tsconfig.json',
-  },
-  rules: {
-    // Add any package-specific rules here
-  }
-};
-```
-
 ### Vite Configuration
 ```typescript
 import { defineConfig } from 'vite';
@@ -154,12 +143,13 @@ export default defineConfig({
     lib: {
       entry: {
         index: resolve(__dirname, 'src/index.ts'),
-        bin: resolve(__dirname, 'bin/contextaider.ts'),
+        contextaider: resolve(__dirname, 'bin/contextaider.ts'),
       },
       formats: ['es'],
+      fileName: (format, entryName) => `${entryName}.js`,
     },
     rollupOptions: {
-      external: ['commander'],
+      external: ['commander', 'fs/promises', 'path'],
     },
   },
   test: {
@@ -289,7 +279,6 @@ export const processFiles = (args: string[]): {
 - CLI parsing and flag translation implementation with Commander
 - Process handoff with TTY preservation
 - Core test coverage
-- ESLint and Prettier configuration
 - Build pipeline setup with Vite
 
 ### Medium Priority 🟠
@@ -313,5 +302,4 @@ export const processFiles = (args: string[]): {
 - Ensure proper monorepo package configuration in `/packages/contextaider`
 - Test edge cases for file existence checks and path handling
 - Consider Windows path compatibility for file existence checks
-- Verify ESLint and Prettier configurations work correctly with TypeScript
 - Ensure build pipeline produces correct output for both library and CLI usage
