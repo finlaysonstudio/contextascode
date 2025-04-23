@@ -13,7 +13,7 @@ Refactor the new command implementation to improve code quality, maintainability
 
 <Dequeued>
 ### Dequeued
-* Externalize configuration into constants or config object #0004
+N/A
 </Dequeued>
 
 <Verified>
@@ -21,6 +21,7 @@ Refactor the new command implementation to improve code quality, maintainability
 * Extract common logic into helper functions #0001
 * Switch to async FS APIs #0002
 * Improve error handling #0003
+* Externalize configuration into constants or config object #0004
 </Verified>
 
 ## 💻 Development Priorities
