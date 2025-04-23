@@ -18,28 +18,28 @@ describe("executedAs", () => {
   describe("Happy Paths", () => {
     it("returns true when filename matches import.meta.url", () => {
       const result = executedAs(["test-file.js"], {
-        search: ["path/to/test-file.js"]
+        search: ["path/to/test-file.js"],
       });
       expect(result).toBe(true);
     });
 
     it("returns true when filename matches process.argv[1]", () => {
       const result = executedAs(["cli.js"], {
-        search: ["path/to/cli.js"]
+        search: ["path/to/cli.js"],
       });
       expect(result).toBe(true);
     });
 
     it("returns false when no filenames match", () => {
       const result = executedAs(["file1.js", "file2.js"], {
-        search: ["path/to/other-file.js"]
+        search: ["path/to/other-file.js"],
       });
       expect(result).toBe(false);
     });
 
     it("checks multiple filenames", () => {
       const result = executedAs(["file1.js", "file2.js", "match.js"], {
-        search: ["path/to/match.js"]
+        search: ["path/to/match.js"],
       });
       expect(result).toBe(true);
     });
@@ -58,7 +58,9 @@ describe("executedAs", () => {
     });
 
     it("handles undefined search locations", () => {
-      const result = executedAs(["file.js"], { search: [undefined, null] as unknown as string[] });
+      const result = executedAs(["file.js"], {
+        search: [undefined, null] as unknown as string[],
+      });
       expect(result).toBe(false);
     });
   });
@@ -67,14 +69,14 @@ describe("executedAs", () => {
   describe("Specific Scenarios", () => {
     it("handles paths with similar endings", () => {
       const result = executedAs(["file.js"], {
-        search: ["path/to/prefix-file.js"]
+        search: ["path/to/prefix-file.js"],
       });
       expect(result).toBe(true);
     });
 
     it("handles multiple search locations", () => {
       const result = executedAs(["target.js"], {
-        search: ["path/to/file1.js", "path/to/file2.js", "path/to/target.js"]
+        search: ["path/to/file1.js", "path/to/file2.js", "path/to/target.js"],
       });
       expect(result).toBe(true);
     });
