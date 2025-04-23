@@ -272,27 +272,19 @@ export const processFiles = (args: string[]): {
 
 ## Development Priorities
 
-### High Priority 🔴
 - Initial TypeScript project setup in `/packages/contextaider`
 - Implement exec mode with frontmatter detection
 - Implement smart file and message handling
 - CLI parsing and flag translation implementation with Commander
 - Process handoff with TTY preservation
 - Core test coverage
-- Build pipeline setup with Vite
-
-### Medium Priority 🟠
 - Spawn-based process handling with stdio inheritance
 - Project structure scaffolding
 - Test suite implementation
 - Workspace configuration
 - Package management setup
-
-### Low Priority 🔵
 - Version check warning system
 - Postinstall script
-- Context helper utilities
-- Documentation improvements
 
 ## Concerns
 - 🔍 VERIFY: Confirm exact flag mapping requirements between custom and aider flags
