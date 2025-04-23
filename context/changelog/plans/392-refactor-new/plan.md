@@ -7,7 +7,6 @@ Refactor the new command implementation to improve code quality, maintainability
 
 <Queued>
 ### Queued
-* Enhance testability by decoupling file system operations #0005
 * Move slug generation function to separate utilities directory #0006
 </Queued>
 
@@ -23,6 +22,11 @@ N/A
 * Improve error handling #0003
 * Externalize configuration into constants or config object #0004
 </Verified>
+
+<Cancelled>
+### Verified
+* Enhance testability by decoupling file system operations #0005 - _codegen struggled; not clear how much of a need this is_
+</Cancelled>
 
 ## 💻 Development Priorities
 
