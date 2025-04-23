@@ -14,13 +14,14 @@ Refactor the new command implementation to improve code quality, maintainability
 
 <Dequeued>
 ### Dequeued
-* Switch to async FS APIs #0002
-* Improve error handling #0003
+N/A
 </Dequeued>
 
 <Verified>
 ### Verified
 * Extract common logic into helper functions #0001
+* Switch to async FS APIs #0002
+* Improve error handling #0003
 </Verified>
 
 ## 💻 Development Priorities
