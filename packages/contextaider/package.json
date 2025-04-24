@@ -1,0 +1,32 @@
+{
+  "name": "contextaider",
+  "version": "0.0.1",
+  "description": "CLI wrapper for the aider tool with enhanced file handling",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "contextaider": "./dist/contextaider.js"
+  },
+  "scripts": {
+    "build": "vite build && tsc --emitDeclarationOnly",
+    "postbuild": "chmod +x dist/contextaider.js",
+    "clean": "rimraf dist",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "cli",
+    "aider",
+    "ai",
+    "coding",
+    "assistant"
+  ],
+  "dependencies": {
+    "commander": "^13.1.0"
+  }
+}
