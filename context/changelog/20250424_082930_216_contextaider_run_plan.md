@@ -1,0 +1,9 @@
+---
+guide: context/prompts/contextascode/workflows/plan-execute/Complete_Single_Task_from_Plan.md
+plan: context/changelog/plans/0014_Aider_Wrapper/plan.md
+---
+
+Read the guide.
+Read the plan.
+Complete a single task from the plan following the steps in the guide.
+Do not complete more than once task
