@@ -295,3 +295,42 @@ export const processFiles = (args: string[]): {
 - Test edge cases for file existence checks and path handling
 - Consider Windows path compatibility for file existence checks
 - Ensure build pipeline produces correct output for both library and CLI usage
+
+## 🗂️ Lifecycle Board
+
+<Queued>
+### Queued
+* Initialize ContextAider package structure #0001
+* Implement exec mode with frontmatter detection #0002
+* Implement file and message handling logic #0003
+* Implement CLI flag parsing and translation #0004
+* Implement process handoff runner preserving TTY #0005
+* Add unit and integration tests #0006
+* Configure build and workspace scripts #0007
+* Add postinstall version check script #0008
+</Queued>
+
+<Dequeued>
+### Dequeued
+N/A
+</Dequeued>
+
+<Verified>
+### Verified
+N/A
+</Verified>
+
+## 🖇️ Context
+<Sources>
+<!-- Add any relevant sources here -->
+</Sources>
+<Changes>
+- ./context/changelog/plans/0014_Aider_Wrapper/0001_Initialize_Contextaider_Package.md
+- ./context/changelog/plans/0014_Aider_Wrapper/0002_Implement_Exec_Mode_With_Frontmatter.md
+- ./context/changelog/plans/0014_Aider_Wrapper/0003_Implement_File_and_Message_Handling.md
+- ./context/changelog/plans/0014_Aider_Wrapper/0004_Implement_CLI_Flag_Parsing_and_Translation.md
+- ./context/changelog/plans/0014_Aider_Wrapper/0005_Implement_Process_Handoff_Runner.md
+- ./context/changelog/plans/0014_Aider_Wrapper/0006_Add_Test_Coverage.md
+- ./context/changelog/plans/0014_Aider_Wrapper/0007_Configure_Build_and_Workspace_Scripts.md
+- ./context/changelog/plans/0014_Aider_Wrapper/0008_Add_Postinstall_Version_Check.md
+</Changes>
