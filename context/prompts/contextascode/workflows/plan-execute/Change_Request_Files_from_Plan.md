@@ -1,7 +1,9 @@
 ---
+exec: 
+  model: thinking: full
+  params: id?, plan
 id: ${id}
 plan: ./context/changelog/plans/${id}/plan.md
-thinking: full
 ---
 # Create Detailed Individual Change Request Tickets 📮
 

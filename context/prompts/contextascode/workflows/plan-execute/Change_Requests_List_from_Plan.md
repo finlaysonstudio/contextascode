@@ -1,7 +1,9 @@
 ---
+exec: 
+  model: thinking: fast
+  params: id?, plan
 id: ${id}
 plan: ./context/changelog/plans/${id}/plan.md
-thinking: fast
 ---
 # Change Request List from Plan 🗒️
 
