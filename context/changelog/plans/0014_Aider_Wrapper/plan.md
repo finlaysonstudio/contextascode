@@ -300,7 +300,6 @@ export const processFiles = (args: string[]): {
 
 <Queued>
 ### Queued
-* Initialize ContextAider package structure #0001
 * Implement exec mode with frontmatter detection #0002
 * Implement file and message handling logic #0003
 * Implement CLI flag parsing and translation #0004
@@ -312,7 +311,7 @@ export const processFiles = (args: string[]): {
 
 <Dequeued>
 ### Dequeued
-N/A
+* Initialize ContextAider package structure #0001
 </Dequeued>
 
 <Verified>
