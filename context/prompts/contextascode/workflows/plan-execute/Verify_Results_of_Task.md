@@ -1,3 +1,12 @@
+---
+exec: 
+  model: thinking: fast
+  params: id?, plan
+id: ${id}
+plan: ./context/changelog/plans/${id}/plan.md
+notes: |
+  Not working as of 4/25/2025
+---
 # Verify Results of Task
 
 ## 📥 Expected Input Context
