@@ -1,123 +1,166 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { spawnAider } from "./runner";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import * as runnerModule from "./runner";
 import { spawn } from "child_process";
+import * as fs from "fs/promises";
 
-// Mock child_process.spawn
+// Mock child_process and fs modules
 vi.mock("child_process", () => ({
   spawn: vi.fn(),
 }));
 
+vi.mock("fs/promises", () => ({
+  stat: vi.fn(),
+}));
+
 describe("runner", () => {
+  const mockSpawn = spawn as unknown as vi.Mock;
+  const mockEventEmitter = {
+    on: vi.fn((event, callback) => {
+      if (event === "exit") {
+        setTimeout(() => callback(0, null), 10);
+      }
+      return mockEventEmitter;
+    }),
+    unref: vi.fn(),
+  };
+  
   beforeEach(() => {
+    vi.clearAllMocks();
+    
+    // Setup default mock behavior
+    mockSpawn.mockReturnValue(mockEventEmitter);
+    
+    // Mock fs.stat to simulate aider executable exists
+    (fs.stat as vi.Mock).mockResolvedValue({
+      isFile: () => true,
+      mode: 0o755, // Executable
+    });
+  });
+  
+  afterEach(() => {
     vi.resetAllMocks();
   });
-
+  
+  describe("findAiderExecutable", () => {
+    it("should find aider in PATH", async () => {
+      // Save original PATH
+      const originalPath = process.env.PATH;
+      
+      // Mock PATH for testing
+      process.env.PATH = "/usr/bin:/usr/local/bin";
+      
+      const result = await runnerModule.findAiderExecutable();
+      
+      // Restore original PATH
+      process.env.PATH = originalPath;
+      
+      expect(fs.stat).toHaveBeenCalledWith(expect.stringContaining("aider"));
+      expect(result).toMatch(/aider$/);
+    });
+    
+    it("should return null if aider is not found", async () => {
+      // Save original PATH
+      const originalPath = process.env.PATH;
+      
+      // Mock PATH for testing
+      process.env.PATH = "/usr/bin:/usr/local/bin";
+      
+      // Mock fs.stat to simulate aider not found
+      (fs.stat as vi.Mock).mockRejectedValue(new Error("ENOENT"));
+      
+      const result = await runnerModule.findAiderExecutable();
+      
+      // Restore original PATH
+      process.env.PATH = originalPath;
+      
+      expect(result).toBeNull();
+    });
+  });
+  
   describe("spawnAider", () => {
-    it("should spawn aider with the given arguments", async () => {
-      // Setup mock implementation
-      const mockOn = vi.fn();
-      (spawn as any).mockReturnValue({
-        on: mockOn,
-      });
-
-      // Setup event handlers
-      mockOn.mockImplementation((event, handler) => {
-        if (event === "close") {
-          // Simulate successful exit
-          setTimeout(() => handler(0), 10);
+    it("should spawn aider with correct arguments", async () => {
+      // Mock findAiderExecutable
+      vi.spyOn(runnerModule, "findAiderExecutable").mockResolvedValue("/usr/bin/aider");
+      
+      // Setup mock to trigger exit event
+      mockEventEmitter.on.mockImplementation((event, callback) => {
+        if (event === "exit") {
+          setTimeout(() => callback(0, null), 10);
         }
-        return { on: mockOn };
+        return mockEventEmitter;
       });
-
-      // Call the function
-      const args = ["--message-file=file.md"];
-      await spawnAider(args);
-
-      // Verify spawn was called correctly
-      expect(spawn).toHaveBeenCalledWith("aider", args, {
-        stdio: "inherit",
-        shell: true,
-      });
-    });
-
-    it("should reject if aider exits with non-zero code", async () => {
-      // Setup mock implementation
-      const mockOn = vi.fn();
-      (spawn as any).mockReturnValue({
-        on: mockOn,
-      });
-
-      // Setup event handlers
-      mockOn.mockImplementation((event, handler) => {
-        if (event === "close") {
-          // Simulate error exit
-          setTimeout(() => handler(1), 10);
-        }
-        return { on: mockOn };
-      });
-
-      // Call the function and expect it to reject
-      const args = ["--message-file=file.md"];
-      await expect(spawnAider(args)).rejects.toThrow(
-        "Aider exited with code 1",
-      );
-    });
-
-    it("should reject if spawn throws an error", async () => {
-      // Setup mock implementation
-      const mockOn = vi.fn();
-      (spawn as any).mockReturnValue({
-        on: mockOn,
-      });
-
-      // Setup event handlers
-      mockOn.mockImplementation((event, handler) => {
-        if (event === "error") {
-          // Simulate spawn error
-          setTimeout(() => handler(new Error("spawn error")), 10);
-        }
-        return { on: mockOn };
-      });
-
-      // Call the function and expect it to reject
-      const args = ["--message-file=file.md"];
-      await expect(spawnAider(args)).rejects.toThrow(
-        "Failed to spawn aider: spawn error",
-      );
-    });
-
-    it("should log debug information when debug option is true", async () => {
-      // Setup mock implementation
-      const mockOn = vi.fn();
-      (spawn as any).mockReturnValue({
-        on: mockOn,
-      });
-
-      // Setup event handlers
-      mockOn.mockImplementation((event, handler) => {
-        if (event === "close") {
-          // Simulate successful exit
-          setTimeout(() => handler(0), 10);
-        }
-        return { on: mockOn };
-      });
-
-      // Spy on console.log
-      const consoleSpy = vi.spyOn(console, "log");
-      consoleSpy.mockImplementation(() => {});
-
-      // Call the function with debug option
-      const args = ["--message-file=file.md"];
-      await spawnAider(args, { debug: true });
-
-      // Verify debug log was called
-      expect(consoleSpy).toHaveBeenCalledWith(
-        "Debug: Spawning aider with args:",
+      
+      const args = ["--flag1", "value1", "--flag2"];
+      const result = await runnerModule.spawnAider(args, { debug: true });
+      
+      expect(mockSpawn).toHaveBeenCalledWith(
+        "/usr/bin/aider",
         args,
+        expect.objectContaining({
+          stdio: "inherit",
+          detached: false,
+        })
       );
-
-      // Restore console.log
-      consoleSpy.mockRestore();
+      
+      expect(mockEventEmitter.unref).toHaveBeenCalled();
+      expect(result).toEqual({
+        exitCode: 0,
+        signal: null,
+      });
+    });
+    
+    it("should throw error if aider executable is not found", async () => {
+      // Mock findAiderExecutable to return null
+      vi.spyOn(runnerModule, "findAiderExecutable").mockResolvedValue(null);
+      
+      await expect(runnerModule.spawnAider([])).rejects.toThrow("Could not find aider executable");
+    });
+    
+    it("should handle spawn errors", async () => {
+      // Mock findAiderExecutable
+      vi.spyOn(runnerModule, "findAiderExecutable").mockResolvedValue("/usr/bin/aider");
+      
+      // Setup mock to trigger error event
+      mockEventEmitter.on.mockImplementation((event, callback) => {
+        if (event === "error") {
+          setTimeout(() => callback(new Error("Spawn error")), 10);
+        }
+        return mockEventEmitter;
+      });
+      
+      await expect(runnerModule.spawnAider([])).rejects.toThrow("Spawn error");
+    });
+    
+    it("should use custom options when provided", async () => {
+      // Mock findAiderExecutable
+      vi.spyOn(runnerModule, "findAiderExecutable").mockResolvedValue("/usr/bin/aider");
+      
+      // Setup mock to trigger exit event
+      mockEventEmitter.on.mockImplementation((event, callback) => {
+        if (event === "exit") {
+          setTimeout(() => callback(0, null), 10);
+        }
+        return mockEventEmitter;
+      });
+      
+      const customOptions = {
+        cwd: "/custom/path",
+        env: { CUSTOM_ENV: "value" },
+        inheritStdio: false,
+        debug: true,
+      };
+      
+      await runnerModule.spawnAider([], customOptions);
+      
+      expect(mockSpawn).toHaveBeenCalledWith(
+        "/usr/bin/aider",
+        [],
+        expect.objectContaining({
+          cwd: "/custom/path",
+          env: { CUSTOM_ENV: "value" },
+          stdio: "pipe",
+        })
+      );
     });
   });
 });
