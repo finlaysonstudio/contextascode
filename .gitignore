@@ -1,5 +1,6 @@
+.aider*
 .env
+/context/out
+/coverage
 dist
 node_modules
-.aider*
-/context/out
