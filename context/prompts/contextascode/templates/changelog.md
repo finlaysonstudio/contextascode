@@ -1,30 +1,12 @@
+---
+files:
+- {{ relative_file_paths }}
+- …
+tests:
+- {{ relative_test_paths }}
+# Tests should be peers with .spec
+---
+
 # {{ message }}
 
-## 🎯 Goal
-<Goal>
-
-</Goal>
-
-## ↔️ Guidance
-<Guidance>
-
-</Guidance>
-
-## 🖇️ Context
-
-<Files>
-</Files>
-
-<Tests>
-</Tests>
-
-### Read-Only
-
-<Guides>
-</Guides>
-
-<Sources>
-</Sources>
-
-<Examples>
-</Examples>
+{{ change_request }}
