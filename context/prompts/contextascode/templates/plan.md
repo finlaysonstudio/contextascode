@@ -20,6 +20,10 @@ context:
 
 ## 🗂️ Lifecycle Board
 
+List and remove tickets in the order they should be processed.
+Processing order takes precedent over ticket numbers.
+Ticket numbers may or may not reflect creation order.
+
 <Queued>
 ### Queued
 * {title} #{NNNN}
