@@ -1,6 +1,6 @@
 import { spawn, SpawnOptions } from "child_process";
-import path from "path";
-import fs from "fs/promises";
+import * as path from "path";
+import * as fs from "fs/promises";
 
 /**
  * Options for spawning the aider process
@@ -35,18 +35,25 @@ export async function findAiderExecutable(): Promise<string | null> {
   const envPath = process.env.PATH || "";
   const pathSeparator = process.platform === "win32" ? ";" : ":";
   const pathDirs = envPath.split(pathSeparator);
-  
+  console.log("pathDirs :>> ", pathDirs);
+
   // Possible executable names based on platform
-  const execNames = process.platform === "win32" 
-    ? ["aider.exe", "aider.cmd", "aider.bat", "aider"] 
-    : ["aider"];
-  
+  const execNames =
+    process.platform === "win32"
+      ? ["aider.exe", "aider.cmd", "aider.bat", "aider"]
+      : ["aider"];
+
   for (const dir of pathDirs) {
+    if (dir === "") continue;
     for (const execName of execNames) {
       const execPath = path.join(dir, execName);
       try {
         const stats = await fs.stat(execPath);
-        if (stats.isFile() && (process.platform === "win32" || (stats.mode & 0o111))) {
+        if (
+          stats.isFile() &&
+          (process.platform === "win32" || stats.mode & 0o111)
+        ) {
+          console.log("execPath :>> ", execPath);
           return execPath;
         }
       } catch (error) {
@@ -54,7 +61,7 @@ export async function findAiderExecutable(): Promise<string | null> {
       }
     }
   }
-  
+
   return null;
 }
 
@@ -68,22 +75,27 @@ export async function spawnAider(
   args: string[],
   options: SpawnAiderOptions = {},
 ): Promise<SpawnAiderResult> {
-  const { debug = false, cwd = process.cwd(), env = process.env, inheritStdio = true } = options;
-  
+  const {
+    debug = false,
+    cwd = process.cwd(),
+    env = process.env,
+    inheritStdio = true,
+  } = options;
+
   // Find aider executable
   const aiderPath = await findAiderExecutable();
-  
+
   if (!aiderPath) {
     throw new Error(
-      "Could not find aider executable in PATH. Please make sure aider is installed and available in your PATH."
+      "Could not find aider executable in PATH. Please make sure aider is installed and available in your PATH.",
     );
   }
-  
+
   if (debug) {
     console.log(`[DEBUG] Using aider executable: ${aiderPath}`);
     console.log(`[DEBUG] Arguments: ${args.join(" ")}`);
   }
-  
+
   // Configure spawn options to preserve TTY
   const spawnOptions: SpawnOptions = {
     cwd,
@@ -92,33 +104,34 @@ export async function spawnAider(
     // Ensure we detach properly to allow the child process to take over the TTY
     detached: false,
   };
-  
+
   return new Promise((resolve, reject) => {
     try {
       const childProcess = spawn(aiderPath, args, spawnOptions);
-      
+
       // We don't want to keep the parent process alive if the child is still running
       if (inheritStdio) {
         childProcess.unref();
       }
-      
+
       childProcess.on("error", (error) => {
         if (debug) {
           console.error(`[DEBUG] Error spawning aider: ${error.message}`);
         }
         reject(error);
       });
-      
+
       childProcess.on("exit", (code, signal) => {
         if (debug) {
-          console.log(`[DEBUG] Aider exited with code ${code} and signal ${signal}`);
+          console.log(
+            `[DEBUG] Aider exited with code ${code} and signal ${signal}`,
+          );
         }
         resolve({
           exitCode: code ?? 1, // Default to 1 if code is null
           signal,
         });
       });
-      
     } catch (error) {
       reject(error);
     }
