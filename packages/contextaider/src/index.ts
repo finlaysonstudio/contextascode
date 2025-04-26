@@ -1,9 +1,15 @@
 // Main entry point for the contextaider package
-// This file will be expanded in subsequent tasks
-
 export const version = "0.0.1";
 
-// Placeholder for future implementation
+export { translateFlags, getAvailableFlagMappings } from "./flag-mappings";
+export { spawnAider } from "./runner";
+export { processExecMode } from "./exec-mode";
+
+/**
+ * Main entry point for the contextaider library
+ */
 export function runContextAider(): void {
-  console.log("ContextAider initialization - placeholder");
+  console.log(
+    "ContextAider initialization - use the CLI or import specific functions",
+  );
 }

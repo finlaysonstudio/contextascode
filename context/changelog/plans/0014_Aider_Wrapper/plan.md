@@ -300,7 +300,6 @@ export const processFiles = (args: string[]): {
 
 <Queued>
 ### Queued
-* Implement CLI flag parsing and translation #0004
 * Implement process handoff runner preserving TTY #0005
 * Add unit and integration tests #0006
 * Configure build and workspace scripts #0007
@@ -312,6 +311,7 @@ export const processFiles = (args: string[]): {
 * Initialize ContextAider package structure #0001
 * Implement exec mode with frontmatter detection #0002
 * Implement file and message handling logic #0003
+* Implement CLI flag parsing and translation #0004
 </Dequeued>
 
 <Verified>

@@ -13,7 +13,7 @@ export default defineConfig({
       fileName: (format, entryName) => `${entryName}.js`,
     },
     rollupOptions: {
-      external: ["commander", "fs/promises", "path"],
+      external: ["commander", "fs/promises", "path", "child_process", "fs"],
     },
   },
   test: {
