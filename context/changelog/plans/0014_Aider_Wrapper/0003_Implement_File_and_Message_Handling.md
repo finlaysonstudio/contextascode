@@ -32,3 +32,25 @@ The implementation should correctly differentiate between files and message stri
 - Test error handling for non-existent files
 - Ensure correct behavior when mixing files and message arguments
 </Tests>
+
+---
+
+<Results>
+Successfully implemented the file and message handling logic for the ContextAider CLI wrapper.
+
+Created two new files:
+1. `packages/contextaider/src/exec-mode/file-handler.ts` - Contains the core file handling functionality:
+   - `fileExists()` - Checks if a file exists and is readable
+   - `readFile()` - Reads a file's contents with error handling
+   - `processFileArgs()` - Processes file arguments to determine valid files
+   - `processArgs()` - Extracts exec file, additional files, and message from arguments
+   - `FileHandlerError` - Custom error class for file handling errors
+
+2. `packages/contextaider/src/exec-mode/file-handler.spec.ts` - Contains comprehensive tests for all functions:
+   - Tests for file existence checking
+   - Tests for file reading with error handling
+   - Tests for argument processing
+   - Tests for edge cases like flag-like arguments
+
+The implementation follows the plan's requirements for handling files and messages in the CLI wrapper. Note that the handler.ts and handler.spec.ts files will be implemented in a future task as they depend on the flag parsing functionality that will be implemented next.
+</Results>
