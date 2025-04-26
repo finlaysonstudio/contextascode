@@ -3,6 +3,15 @@ import * as path from "path";
 import * as fs from "fs/promises";
 
 /**
+ * Check if echo mode is enabled
+ * @returns true if echo mode is enabled, false otherwise
+ */
+export function isEchoModeEnabled(): boolean {
+  const echoModeEnv = process.env.CONTEXT_AIDER_ECHO_MODE;
+  return echoModeEnv !== "false" && echoModeEnv !== "0";
+}
+
+/**
  * Options for spawning the aider process
  */
 export interface SpawnAiderOptions {
@@ -27,21 +36,38 @@ export interface SpawnAiderResult {
 }
 
 /**
- * Find the aider executable in the PATH
- * @returns The path to the aider executable or null if not found
+ * Find the appropriate executable in the PATH
+ * @returns The path to the executable or null if not found
  */
-export async function findAiderExecutable(): Promise<string | null> {
-  // Check if aider is in PATH
+export async function findExecutable(): Promise<string | null> {
+  const useEcho = isEchoModeEnabled();
+  const commandName = useEcho ? "echo" : "aider";
+
+  // Check if command is in PATH
   const envPath = process.env.PATH || "";
   const pathSeparator = process.platform === "win32" ? ";" : ":";
   const pathDirs = envPath.split(pathSeparator);
-  console.log("pathDirs :>> ", pathDirs);
+
+  if (useEcho && process.platform !== "win32") {
+    // On Unix systems, echo is a shell builtin, so we'll default to /bin/echo
+    try {
+      const builtinPath = "/bin/echo";
+      const stats = await fs.stat(builtinPath);
+      if (stats.isFile() && stats.mode & 0o111) {
+        return builtinPath;
+      }
+    } catch (error) {
+      // Continue to search in PATH
+    }
+  }
 
   // Possible executable names based on platform
   const execNames =
     process.platform === "win32"
-      ? ["aider.exe", "aider.cmd", "aider.bat", "aider"]
-      : ["aider"];
+      ? useEcho
+        ? ["echo.exe", "echo.cmd", "echo.bat", "echo"]
+        : ["aider.exe", "aider.cmd", "aider.bat", "aider"]
+      : [commandName];
 
   for (const dir of pathDirs) {
     if (dir === "") continue;
@@ -66,12 +92,12 @@ export async function findAiderExecutable(): Promise<string | null> {
 }
 
 /**
- * Spawn the aider process with the given arguments
- * @param args Arguments to pass to aider
+ * Spawn a process with the given arguments
+ * @param args Arguments to pass to the executable
  * @param options Options for spawning the process
  * @returns A promise that resolves when the process exits
  */
-export async function spawnAider(
+export async function spawnCommand(
   args: string[],
   options: SpawnAiderOptions = {},
 ): Promise<SpawnAiderResult> {
@@ -82,17 +108,23 @@ export async function spawnAider(
     inheritStdio = true,
   } = options;
 
-  // Find aider executable
-  const aiderPath = await findAiderExecutable();
+  const useEcho = isEchoModeEnabled();
+  const commandName = useEcho ? "echo" : "aider";
 
-  if (!aiderPath) {
-    throw new Error(
-      "Could not find aider executable in PATH. Please make sure aider is installed and available in your PATH.",
+  // Find executable
+  const execPath = await findExecutable();
+
+  if (!execPath) {
+    // Using Promise.reject ensures this will be properly caught in tests with expect().rejects
+    return Promise.reject(
+      new Error(
+        `Could not find ${commandName} executable in PATH. Please make sure ${commandName} is installed and available in your PATH.`,
+      ),
     );
   }
 
   if (debug) {
-    console.log(`[DEBUG] Using aider executable: ${aiderPath}`);
+    console.log(`[DEBUG] Using ${commandName} executable: ${execPath}`);
     console.log(`[DEBUG] Arguments: ${args.join(" ")}`);
   }
 
@@ -107,7 +139,7 @@ export async function spawnAider(
 
   return new Promise((resolve, reject) => {
     try {
-      const childProcess = spawn(aiderPath, args, spawnOptions);
+      const childProcess = spawn(execPath, args, spawnOptions);
 
       // We don't want to keep the parent process alive if the child is still running
       if (inheritStdio) {
@@ -116,7 +148,9 @@ export async function spawnAider(
 
       childProcess.on("error", (error) => {
         if (debug) {
-          console.error(`[DEBUG] Error spawning aider: ${error.message}`);
+          console.error(
+            `[DEBUG] Error spawning ${commandName}: ${error.message}`,
+          );
         }
         reject(error);
       });
@@ -124,7 +158,7 @@ export async function spawnAider(
       childProcess.on("exit", (code, signal) => {
         if (debug) {
           console.log(
-            `[DEBUG] Aider exited with code ${code} and signal ${signal}`,
+            `[DEBUG] ${commandName} exited with code ${code} and signal ${signal}`,
           );
         }
         resolve({
@@ -136,4 +170,19 @@ export async function spawnAider(
       reject(error);
     }
   });
+}
+
+/**
+ * Spawn the aider process with the given arguments
+ * @param args Arguments to pass to aider
+ * @param options Options for spawning the process
+ * @returns A promise that resolves when the process exits
+ */
+export async function spawnAider(
+  args: string[],
+  options: SpawnAiderOptions = {},
+): Promise<SpawnAiderResult> {
+  // Explicitly call spawnCommand to make it easier to mock in tests
+  const result = await spawnCommand(args, options);
+  return result;
 }
