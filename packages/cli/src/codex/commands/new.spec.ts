@@ -1,4 +1,13 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import {
+  describe,
+  it,
+  expect,
+  vi,
+  beforeEach,
+  afterEach,
+  beforeAll,
+  afterAll,
+} from "vitest";
 import fs from "fs";
 import { handleNewCommand, NewCommandType } from "./new";
 import * as inquirerPrompts from "@inquirer/prompts";
@@ -17,6 +26,20 @@ vi.mock("../../utils/string");
 
 describe("handleNewCommand", () => {
   const mockDate = new Date("2023-01-01T00:30:45.678Z");
+
+  // Setup and teardown console mocks outside of individual tests
+  beforeEach(() => {
+    vi.spyOn(console, "log").mockImplementation(() => {});
+    vi.spyOn(console, "info").mockImplementation(() => {});
+    vi.spyOn(console, "warn").mockImplementation(() => {});
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    vi.spyOn(console, "debug").mockImplementation(() => {});
+  });
+
+  afterAll(() => {
+    // Restore all console mocks
+    vi.restoreAllMocks();
+  });
 
   beforeEach(() => {
     // Mock Date
