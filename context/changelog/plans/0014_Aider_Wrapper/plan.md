@@ -1,5 +1,32 @@
 # ContextAider Implementation Plan
 
+## 🗂️ Lifecycle Board
+
+List and remove tickets in the order they should be processed.
+Processing order takes precedent over ticket numbers.
+Ticket numbers may or may not reflect creation order.
+
+<Queued>
+### Queued
+* Add unit and integration tests #0006
+* Configure build and workspace scripts #0007
+* Add postinstall version check script #0008
+</Queued>
+
+<Dequeued>
+### Dequeued
+* Initialize ContextAider package structure #0001
+* Implement exec mode with frontmatter detection #0002
+* Implement file and message handling logic #0003
+* Implement CLI flag parsing and translation #0004
+* Implement process handoff runner preserving TTY #0005
+</Dequeued>
+
+<Verified>
+### Verified
+N/A
+</Verified>
+
 ## Overview
 A TypeScript-based CLI wrapper for the aider tool that preprocesses custom flags and seamlessly hands off to the original aider, preserving its interactive UI. Built with ESM modules, Commander for CLI parsing, and Vitest for testing, packaged as `contextaider`. Provides enhanced file handling and message passing capabilities through a modular exec mode.
 
@@ -295,33 +322,6 @@ export const processFiles = (args: string[]): {
 - Test edge cases for file existence checks and path handling
 - Consider Windows path compatibility for file existence checks
 - Ensure build pipeline produces correct output for both library and CLI usage
-
-## 🗂️ Lifecycle Board
-
-List and remove tickets in the order they should be processed.
-Processing order takes precedent over ticket numbers.
-Ticket numbers may or may not reflect creation order.
-
-<Queued>
-### Queued
-* Add unit and integration tests #0006
-* Configure build and workspace scripts #0007
-* Add postinstall version check script #0008
-</Queued>
-
-<Dequeued>
-### Dequeued
-* Initialize ContextAider package structure #0001
-* Implement exec mode with frontmatter detection #0002
-* Implement file and message handling logic #0003
-* Implement CLI flag parsing and translation #0004
-* Implement process handoff runner preserving TTY #0005
-</Dequeued>
-
-<Verified>
-### Verified
-N/A
-</Verified>
 
 ## 🖇️ Context
 <Sources>
