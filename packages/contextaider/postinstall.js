@@ -6,10 +6,7 @@
  */
 
 import { execSync } from "child_process";
-import { createRequire } from "module";
-
-const require = createRequire(import.meta.url);
-const packageJson = require("./package.json");
+import packageJson from "./package.json" assert { type: "json" };
 
 // Minimum required aider version
 const MIN_AIDER_VERSION = "0.18.0";
