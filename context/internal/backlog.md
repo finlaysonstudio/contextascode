@@ -4,8 +4,6 @@
 
 ### In Progress
 
-1. Get a meta analysis on what should be done
-2. Write a plan
 
 ### On Deck
 
