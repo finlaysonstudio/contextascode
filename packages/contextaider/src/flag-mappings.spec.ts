@@ -1,7 +1,24 @@
-import { describe, it, expect } from "vitest";
-import { translateFlags, getAvailableFlagMappings } from "./flag-mappings";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import {
+  translateFlags,
+  getAvailableFlagMappings,
+  flagMappings,
+} from "./flag-mappings";
 
 describe("flag-mappings", () => {
+  // Save original flagMappings
+  const originalFlagMappings = [...flagMappings];
+
+  beforeEach(() => {
+    // Reset flagMappings to original state before each test
+    while (flagMappings.length > 0) {
+      flagMappings.pop();
+    }
+    originalFlagMappings.forEach((mapping) =>
+      flagMappings.push({ ...mapping }),
+    );
+  });
+
   describe("translateFlags", () => {
     it("should pass through unmapped flags", () => {
       const args = ["--unknown-flag", "value"];
@@ -28,18 +45,47 @@ describe("flag-mappings", () => {
     });
 
     it("should handle multiple mapped flags", () => {
-      // This test will be more useful when we add more flag mappings
-      const args = ["--exec", "file.md", "--other-mapped-flag"];
+      // Add a test mapping for this test
+      flagMappings.push({
+        contextaiderFlag: "--test-flag",
+        aiderFlag: "--aider-test-flag",
+        takesValue: true,
+        description: "Test flag for multiple mappings",
+      });
+
+      const args = ["--exec", "file.md", "--test-flag", "test-value"];
       expect(translateFlags(args)).toEqual([
         "--message-file=file.md",
-        "--other-mapped-flag",
+        "--aider-test-flag=test-value",
       ]);
     });
 
     it("should handle flags without values correctly", () => {
-      // This will be more useful when we add boolean flags
+      // Add a boolean flag mapping for this test
+      flagMappings.push({
+        contextaiderFlag: "--boolean-flag",
+        aiderFlag: "--aider-boolean",
+        takesValue: false,
+        description: "Boolean flag test",
+      });
+
       const args = ["--boolean-flag"];
-      expect(translateFlags(args)).toEqual(args);
+      expect(translateFlags(args)).toEqual(["--aider-boolean"]);
+    });
+
+    it("should handle empty args array", () => {
+      const args: string[] = [];
+      expect(translateFlags(args)).toEqual([]);
+    });
+
+    it("should handle flags with missing values", () => {
+      const args = ["--exec"];
+      expect(translateFlags(args)).toEqual(["--message-file"]);
+    });
+
+    it("should handle multiple consecutive flags", () => {
+      const args = ["--exec", "--unknown"];
+      expect(translateFlags(args)).toEqual(["--message-file", "--unknown"]);
     });
   });
 
@@ -49,7 +95,23 @@ describe("flag-mappings", () => {
       expect(mappings.length).toBeGreaterThan(0);
       expect(mappings[0]).toHaveProperty("contextaiderFlag");
       expect(mappings[0]).toHaveProperty("aiderFlag");
+      expect(mappings[0]).toHaveProperty("takesValue");
       expect(mappings[0]).toHaveProperty("description");
+    });
+
+    it("should return a copy of the mappings, not the original", () => {
+      const mappings = getAvailableFlagMappings();
+      // Modify the returned array
+      mappings.push({
+        contextaiderFlag: "--test-flag",
+        aiderFlag: "--test-aider",
+        takesValue: true,
+        description: "Test flag",
+      });
+
+      // Get mappings again and verify the original wasn't modified
+      const newMappings = getAvailableFlagMappings();
+      expect(newMappings.length).toBe(originalFlagMappings.length);
     });
   });
 });

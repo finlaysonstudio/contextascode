@@ -8,7 +8,6 @@ Ticket numbers may or may not reflect creation order.
 
 <Queued>
 ### Queued
-* Add unit and integration tests #0006
 * Configure build and workspace scripts #0007
 * Add postinstall version check script #0008
 </Queued>
@@ -20,6 +19,7 @@ Ticket numbers may or may not reflect creation order.
 * Implement file and message handling logic #0003
 * Implement CLI flag parsing and translation #0004
 * Implement process handoff runner preserving TTY #0005
+* Add unit and integration tests #0006
 </Dequeued>
 
 <Verified>

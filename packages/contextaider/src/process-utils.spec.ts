@@ -3,6 +3,7 @@ import type { MockInstance } from "vitest";
 import { spawn } from "child_process";
 import * as executables from "./executables";
 import * as processUtils from "./process-utils";
+import { EventEmitter } from "events";
 
 // Mock child_process module
 vi.mock("child_process", () => ({
@@ -174,6 +175,78 @@ describe("process-utils", () => {
 
       // Restore real timers
       vi.useRealTimers();
+    });
+
+    it("should handle non-zero exit codes", async () => {
+      // Setup mock to trigger exit event with non-zero code
+      mockEventEmitter.on.mockImplementation((event, callback) => {
+        if (event === "exit") {
+          setTimeout(() => callback(1, null), 10);
+        }
+        return mockEventEmitter;
+      });
+
+      const result = await processUtils.spawnCommand([]);
+
+      expect(result).toEqual({
+        exitCode: 1,
+        signal: null,
+      });
+    });
+
+    it("should handle null exit code", async () => {
+      // Setup mock to trigger exit event with null code
+      mockEventEmitter.on.mockImplementation((event, callback) => {
+        if (event === "exit") {
+          setTimeout(() => callback(null, null), 10);
+        }
+        return mockEventEmitter;
+      });
+
+      const result = await processUtils.spawnCommand([]);
+
+      expect(result).toEqual({
+        exitCode: 1, // Default to 1 if code is null
+        signal: null,
+      });
+    });
+
+    it("should handle spawn function throwing an error", async () => {
+      // Mock spawn to throw an error
+      mockSpawn.mockImplementation(() => {
+        throw new Error("Spawn error");
+      });
+
+      await expect(processUtils.spawnCommand([])).rejects.toThrow(
+        processUtils.ProcessExecutionError,
+      );
+    });
+  });
+
+  describe("ProcessExecutionError", () => {
+    it("should create an error with the correct properties", () => {
+      const cause = new Error("Original error");
+      const error = new processUtils.ProcessExecutionError(
+        "Test error message",
+        "test-command",
+        cause,
+      );
+
+      expect(error.message).toBe("Test error message");
+      expect(error.command).toBe("test-command");
+      expect(error.cause).toBe(cause);
+      expect(error.name).toBe("ProcessExecutionError");
+    });
+
+    it("should work without a cause", () => {
+      const error = new processUtils.ProcessExecutionError(
+        "Test error message",
+        "test-command",
+      );
+
+      expect(error.message).toBe("Test error message");
+      expect(error.command).toBe("test-command");
+      expect(error.cause).toBeUndefined();
     });
   });
 });

@@ -37,7 +37,8 @@ export async function findExecutable(): Promise<string | null> {
   const pathSeparator = process.platform === "win32" ? ";" : ":";
   const pathDirs = envPath.split(pathSeparator);
 
-  if (useEcho && process.platform !== "win32") {
+  // Only check for builtin echo if PATH is not empty
+  if (useEcho && process.platform !== "win32" && envPath.trim() !== "") {
     // On Unix systems, echo is a shell builtin, so we'll default to /bin/echo
     try {
       const builtinPath = "/bin/echo";
