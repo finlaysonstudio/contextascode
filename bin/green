@@ -8,3 +8,5 @@ npm run format &> /dev/null
 npm run lint
 npm run test
 npm run typecheck
+
+git status
