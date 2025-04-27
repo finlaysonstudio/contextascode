@@ -1,0 +1,26 @@
+{
+  "output": {
+    "filePath": "./context/out/repo/contextaider.xml",
+    "style": "xml",
+    "parsableStyle": true,
+    "directoryStructure": true
+  },
+  "include": [
+    "./packages/contextaider/**"
+  ],
+  "ignore": {
+    "useGitignore": true,
+    "useDefaultPatterns": true,
+    "customPatterns": [
+      "./packages/contextaider/node_modules/**",
+      "./packages/contextaider/dist/**",
+      "./packages/contextaider/coverage/**",
+      "./packages/contextaider/tsconfig.json",
+      "./packages/contextaider/vite.config.ts",
+      "./packages/contextaider/vitest.config.ts"
+    ]
+  },
+  "security": {
+    "enableSecurityCheck": true
+  }
+}

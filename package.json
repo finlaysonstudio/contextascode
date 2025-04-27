@@ -26,7 +26,7 @@
     "typecheck:contextaider": "npm run typecheck --workspace=packages/contextaider",
     "dev": "vite",
     "dev:contextaider": "npm run dev --workspace=packages/contextaider",
-    "repomix": "npm run repomix:packages && npm run repomix:packages:cli && npm run repomix:context && npm run repomix:context:changelog && npm run repomix:context:internal && npm run repomix:monorepo",
+    "repomix": "npm run repomix:packages && npm run repomix:packages:cli && npm run repomix:context && npm run repomix:context:changelog && npm run repomix:context:internal && npm run repomix:contextaider && npm run repomix:monorepo",
     "repomix:packages": "repomix --config config/repomix/packages.json",
     "repomix:packages:copy": "repomix --config config/repomix/packages.json --copy",
     "repomix:packages:cli": "repomix --config config/repomix/packages-cli.json",
@@ -38,7 +38,9 @@
     "repomix:context:internal": "repomix --config config/repomix/context-internal.json",
     "repomix:context:internal:copy": "repomix --config config/repomix/context-internal.json --copy",
     "repomix:monorepo": "repomix --config config/repomix/monorepo.json",
-    "repomix:monorepo:copy": "repomix --config config/repomix/monorepo.json --copy"
+    "repomix:monorepo:copy": "repomix --config config/repomix/monorepo.json --copy",
+    "repomix:contextaider": "repomix --config config/repomix/contextaider.json",
+    "repomix:contextaider:copy": "repomix --config config/repomix/contextaider.json --copy"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",
