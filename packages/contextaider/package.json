@@ -12,6 +12,7 @@
     "build": "vite build && tsc --emitDeclarationOnly",
     "postbuild": "chmod +x dist/contextaider.js",
     "clean": "rimraf dist",
+    "postinstall": "node postinstall.js",
     "test": "vitest run",
     "test:watch": "vitest watch",
     "test:coverage": "vitest run --coverage",
@@ -22,7 +23,8 @@
   },
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "postinstall.js"
   ],
   "keywords": [
     "cli",

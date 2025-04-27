@@ -8,10 +8,10 @@ Ticket numbers may or may not reflect creation order.
 
 <Queued>
 ### Queued
-* Add postinstall version check script #0008
 </Queued>
 
 <Dequeued>
+* Add postinstall version check script #0008
 ### Dequeued
 * Initialize ContextAider package structure #0001
 * Implement exec mode with frontmatter detection #0002
