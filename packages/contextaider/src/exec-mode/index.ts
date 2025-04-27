@@ -39,7 +39,7 @@ export interface ExecModeResult {
 export const processExecMode = async (
   options: ExecModeOptions,
 ): Promise<ExecModeResult> => {
-  const { execFile, debug = false } = options;
+  const { execFile, debug = true } = options; // Always enable debug mode
 
   try {
     // Check if file exists
@@ -52,7 +52,8 @@ export const processExecMode = async (
     // Read file with frontmatter
     const parseResult = await readFileWithFrontmatter(execFile);
 
-    if (debug && parseResult.hasFrontmatter) {
+    // Always log when frontmatter is detected
+    if (parseResult.hasFrontmatter) {
       console.log("Exec frontmatter detected");
     }
 
@@ -66,9 +67,8 @@ export const processExecMode = async (
       aiderArgs,
     };
   } catch (error) {
-    if (debug) {
-      console.error(`Error processing exec file: ${(error as Error).message}`);
-    }
+    // Always log debug errors
+    console.error(`Error processing exec file: ${(error as Error).message}`);
 
     return {
       filePath: execFile,

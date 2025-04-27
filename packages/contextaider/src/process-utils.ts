@@ -57,7 +57,7 @@ export async function spawnCommand(
   options: SpawnProcessOptions = {},
 ): Promise<SpawnProcessResult> {
   const {
-    debug = false,
+    debug = true, // Always enable debug mode
     cwd = process.cwd(),
     env = process.env,
     inheritStdio = true,
@@ -120,11 +120,10 @@ export async function spawnCommand(
       childProcess.on("error", (error) => {
         if (timeoutId) clearTimeout(timeoutId);
 
-        if (debug) {
-          console.error(
-            `[DEBUG] Error spawning ${commandName}: ${error.message}`,
-          );
-        }
+        // Always log debug info
+        console.error(
+          `[DEBUG] Error spawning ${commandName}: ${error.message}`,
+        );
         reject(
           new ProcessExecutionError(
             `Failed to spawn ${commandName}: ${error.message}`,
@@ -137,11 +136,10 @@ export async function spawnCommand(
       childProcess.on("exit", (code, signal) => {
         if (timeoutId) clearTimeout(timeoutId);
 
-        if (debug) {
-          console.log(
-            `[DEBUG] ${commandName} exited with code ${code} and signal ${signal}`,
-          );
-        }
+        // Always log debug info
+        console.log(
+          `[DEBUG] ${commandName} exited with code ${code} and signal ${signal}`,
+        );
         resolve({
           exitCode: code ?? 1, // Default to 1 if code is null
           signal,

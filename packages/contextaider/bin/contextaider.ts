@@ -37,7 +37,7 @@ program
         // Run in exec mode
         const result = await processExecMode({
           execFile: targetFile,
-          debug: options.debug,
+          debug: true, // Always enable debug mode
         });
 
         // Prepare arguments for aider
@@ -53,9 +53,8 @@ program
           aiderArgs = [...aiderArgs, "--message", message];
         }
 
-        if (options.debug) {
-          console.log("Debug: Spawning aider with args:", aiderArgs);
-        }
+        // Always log debug info
+        console.log("Debug: Spawning aider with args:", aiderArgs);
 
         // Hand off to aider
         await spawnAider(aiderArgs);
@@ -63,12 +62,11 @@ program
         // No exec file, just translate flags and pass through to aider
         const translatedArgs = translateFlags(allArgs);
 
-        if (options.debug) {
-          console.log(
-            "Debug: Spawning aider with translated args:",
-            translatedArgs,
-          );
-        }
+        // Always log debug info
+        console.log(
+          "Debug: Spawning aider with translated args:",
+          translatedArgs,
+        );
 
         // Hand off to aider
         await spawnAider(translatedArgs);

@@ -50,11 +50,10 @@ export async function spawnAider(
       lastError = error;
       retryCount++;
 
-      if (options.debug) {
-        console.log(
-          `[DEBUG] Attempt ${retryCount}/${maxRetries + 1} failed, ${retryCount <= maxRetries ? "retrying..." : "giving up."}`,
-        );
-      }
+      // Always log debug info
+      console.log(
+        `[DEBUG] Attempt ${retryCount}/${maxRetries + 1} failed, ${retryCount <= maxRetries ? "retrying..." : "giving up."}`,
+      );
 
       // If we've reached max retries, rethrow the error
       if (retryCount > maxRetries) {
