@@ -78,30 +78,38 @@ export async function spawnCommand(
 
   if (debug) {
     console.log(`[DEBUG] Using ${commandName} executable: ${execPath}`);
-    
+
     // Format arguments for display, properly quoting message parameters
     const formattedArgs = [...args];
-    const messageIndex = formattedArgs.indexOf('--message');
+    const messageIndex = formattedArgs.indexOf("--message");
     if (messageIndex !== -1 && messageIndex < formattedArgs.length - 1) {
       // Quote the message parameter if it contains spaces and isn't already quoted
       const message = formattedArgs[messageIndex + 1];
-      if (message.includes(' ') && !message.startsWith('"') && !message.endsWith('"')) {
+      if (
+        message.includes(" ") &&
+        !message.startsWith('"') &&
+        !message.endsWith('"')
+      ) {
         formattedArgs[messageIndex + 1] = `"${message}"`;
       }
     }
-    
+
     console.log(`[DEBUG] Arguments: ${formattedArgs.join(" ")}`);
   }
 
   // Process arguments to properly handle message quoting
   const processedArgs = [...args];
-  const messageIndex = processedArgs.indexOf('--message');
+  const messageIndex = processedArgs.indexOf("--message");
   if (messageIndex !== -1 && messageIndex < processedArgs.length - 1) {
     // If the message contains spaces and isn't already quoted, we need to handle it specially
     const message = processedArgs[messageIndex + 1];
-    if (message.includes(' ') && !message.startsWith('"') && !message.endsWith('"')) {
+    if (
+      message.includes(" ") &&
+      !message.startsWith('"') &&
+      !message.endsWith('"')
+    ) {
       // For echo mode, we need to ensure the message is properly quoted in the output
-      if (commandName === 'echo') {
+      if (commandName === "echo") {
         processedArgs[messageIndex + 1] = `"${message}"`;
       }
     }

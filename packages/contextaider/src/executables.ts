@@ -21,15 +21,26 @@ export class ExecutableNotFoundError extends Error {
  */
 export function isEchoModeEnabled(): boolean {
   const echoModeEnv = process.env.CONTEXT_AIDER_ECHO_MODE;
-  return echoModeEnv !== "false" && echoModeEnv !== "0";
+  return echoModeEnv === "true" || echoModeEnv === "1";
+}
+
+/**
+ * Check if dry run mode is enabled via command line flag
+ * @param args Command line arguments
+ * @returns true if dry run mode is enabled, false otherwise
+ */
+export function isDryRunEnabled(args: string[] = process.argv): boolean {
+  return args.includes("--dry-run");
 }
 
 /**
  * Find the appropriate executable in the PATH
  * @returns The path to the executable or null if not found
  */
-export async function findExecutable(): Promise<string | null> {
-  const useEcho = isEchoModeEnabled();
+export async function findExecutable(
+  args: string[] = process.argv,
+): Promise<string | null> {
+  const useEcho = isEchoModeEnabled() || isDryRunEnabled(args);
   const commandName = useEcho ? "echo" : "aider";
 
   // Check if command is in PATH
@@ -84,6 +95,6 @@ export async function findExecutable(): Promise<string | null> {
  * Get the current command name based on echo mode
  * @returns The command name (either "echo" or "aider")
  */
-export function getCommandName(): string {
-  return isEchoModeEnabled() ? "echo" : "aider";
+export function getCommandName(args: string[] = process.argv): string {
+  return isEchoModeEnabled() || isDryRunEnabled(args) ? "echo" : "aider";
 }
