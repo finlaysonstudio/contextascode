@@ -6,7 +6,6 @@
  */
 
 import { execSync } from "child_process";
-import packageJson from "./package.json" assert { type: "json" };
 
 // Minimum required aider version
 const MIN_AIDER_VERSION = "0.18.0";
